@@ -1,1 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pong Game</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #000;
+        }
+        canvas {
+            border: 1px solid white;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="pong" width="800" height="400"></canvas>
+    <script>
+        const canvas = document.getElementById("pong");
+        const context = canvas.getContext("2d");
 
+        // Create the pong paddle and ball
+        const paddleWidth = 10;
+        const paddleHeight = 100;
+        const ballSize = 10;
+
+        const userPaddle = {
+            x: 0,
+            y: canvas.height / 2 - paddleHeight / 2,
+            width: paddleWidth,
+            height: paddleHeight,
+            color: "white",
+            dy: 5
+        };
+
+        const computerPaddle = {
+            x: canvas.width - paddleWidth,
+            y: canvas.height / 2 - paddleHeight / 2,
+            width: paddleWidth,
+            height: paddleHeight,
+            color: "white"
+        };
+
+        const ball = {
+            x: canvas.width / 2,
+            y: canvas.height / 2,
+            size: ballSize,
+            speed: 5,
+            dx: 5,
+            dy: 5
+        };
+
+        // Score
+        let userScore = 0;
+        let computerScore = 0;
+
+        // Event Listener for User Paddle
+        document.addEventListener("keydown", movePaddle);
+        document.addEventListener("keyup", stopPaddle);
+
+        function movePaddle(event) {
+            switch (event.key) {
+                case "ArrowUp":
+                    userPaddle.dy = -5;
+                    break;
+                case "ArrowDown":
+                    userPaddle.dy = 5;
+                    break;
+            }
+        }
+
+        function stopPaddle(event) {
+            switch (event.key) {
+                case "ArrowUp":
+                case "ArrowDown":
+                    userPaddle.dy = 0;
+                    break;
+            }
+        }
+
+        // Draw everything
+        function draw() {
+            // Clear canvas
+            context.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw paddles
+            context.fillStyle = userPaddle.color;
+            context.fillRect(userPaddle.x, userPaddle.y, userPaddle.width, userPaddle.height);
+            context.fillStyle = computerPaddle.color;
+            context.fillRect(computerPaddle.x, computerPaddle.y, computerPaddle.width, computerPaddle.height);
+
+            // Draw ball
+            context.fillStyle = "white";
+            context.beginPath();
+            context.arc(ball.x, ball.y, ball.size, 0, Math.PI*2, false);
+            context.fill();
+        }
+
+        // Update game objects
+        function update() {
+            // Move user paddle
+            userPaddle.y += userPaddle.dy;
+            if (userPaddle.y < 0) userPaddle.y = 0;
+            if (userPaddle.y + userPaddle.height > canvas.height) userPaddle.y = canvas.height - userPaddle.height;
+
+            // Move computer paddle
+            if (ball.y > computerPaddle.y + computerPaddle.height / 2) {
+                computerPaddle.y += 5;
+            } else {
+                computerPaddle.y -= 5;
+            }
+            if (computerPaddle.y < 0) computerPaddle.y = 0;
+            if (computerPaddle.y + computerPaddle.height > canvas.height) computerPaddle.y = canvas.height - computerPaddle.height;
+
+            // Move ball
+            ball.x += ball.dx;
+            ball.y += ball.dy;
+
+            // Ball collision with top and bottom
+            if (ball.y + ball.size > canvas.height || ball.y - ball.size < 0) {
+                ball.dy *= -1;
+            }
+
+            // Ball collision with paddles
+            if (ball.x - ball.size < userPaddle.x + userPaddle.width && ball.y > userPaddle.y && ball.y < userPaddle.y + userPaddle.height) {
+                ball.dx *= -1;
+            }
+            if (ball.x + ball.size > computerPaddle.x && ball.y > computerPaddle.y && ball.y < computerPaddle.y + computerPaddle.height) {
+                ball.dx *= -1;
+            }
+
+            // Scoring
+            if (ball.x + ball.size > canvas.width) {
+                userScore++; // User scores
+                resetBall();
+            } else if (ball.x - ball.size < 0) {
+                computerScore++; // Computer scores
+                resetBall();
+            }
+        }
+
+        // Reset ball position
+        function resetBall() {
+            ball.x = canvas.width / 2;
+            ball.y = canvas.height / 2;
+            ball.dx = -ball.dx;
+        }
+
+        // Game loop
+        function gameLoop() {
+            draw();
+            update();
+            requestAnimationFrame(gameLoop);
+        }
+
+        // Start the game
+        gameLoop();
+    </script>
+</body>
+</html>
