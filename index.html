@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Image Compressor Tool</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+
+body{
+font-family:Arial;
+background:#f2f2f2;
+text-align:center;
+padding:40px;
+}
+
+.box{
+background:white;
+padding:30px;
+border-radius:10px;
+max-width:500px;
+margin:auto;
+box-shadow:0 0 10px rgba(0,0,0,0.1);
+}
+
+input,select,button{
+width:90%;
+padding:10px;
+margin:10px;
+}
+
+button{
+background:#28a745;
+color:white;
+border:none;
+cursor:pointer;
+}
+
+button:hover{
+background:#218838;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="box">
+
+<h2>Online Image Compressor</h2>
+
+<input type="file" id="imageInput" accept="image/*">
+
+<select id="format">
+<option value="image/jpeg">JPG</option>
+<option value="image/png">PNG</option>
+<option value="image/webp">WEBP</option>
+</select>
+
+<label>Compression (0.1 – 1)</label>
+<input type="range" id="quality" min="0.1" max="1" step="0.1" value="0.7">
+
+<button onclick="compressImage()">Compress Image</button>
+
+<br><br>
+
+<a id="downloadLink" style="display:none">Download Image</a>
+
+</div>
+
+<script>
+
+function compressImage(){
+
+let file=document.getElementById("imageInput").files[0];
+
+if(!file){
+alert("Please upload image");
+return;
+}
+
+let reader=new FileReader();
+
+reader.readAsDataURL(file);
+
+reader.onload=function(e){
+
+let img=new Image();
+
+img.src=e.target.result;
+
+img.onload=function(){
+
+let canvas=document.createElement("canvas");
+
+canvas.width=img.width;
+canvas.height=img.height;
+
+let ctx=canvas.getContext("2d");
+
+ctx.drawImage(img,0,0);
+
+let quality=document.getElementById("quality").value;
+
+let format=document.getElementById("format").value;
+
+canvas.toBlob(function(blob){
+
+let url=URL.createObjectURL(blob);
+
+let link=document.getElementById("downloadLink");
+
+link.href=url;
+
+link.download="compressed-image";
+
+link.innerHTML="Download Image";
+
+link.style.display="block";
+
+},format,quality);
+
+}
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
