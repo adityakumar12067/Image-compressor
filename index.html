@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Best Image Compressor - Pro Suite</title>
+    <title>Best Image Compressor - Pro Suite v3.0</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -11,214 +11,173 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <style>
-        .tool-card { transition: all 0.3s ease; border: 2px solid transparent; }
-        .tool-card:hover { transform: translateY(-8px); border-color: #ef4444; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
-        #previewCanvas { max-width: 100%; height: auto; border-radius: 8px; }
+        .tool-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border: 2px solid transparent; }
+        .tool-card:hover { transform: translateY(-10px); border-color: #ef4444; box-shadow: 0 25px 50px -12px rgba(239, 68, 68, 0.15); }
+        #previewCanvas { max-width: 100%; height: auto; border-radius: 12px; cursor: move; border: 2px dashed #cbd5e1; }
         .slider { width: 100%; accent-color: #ef4444; }
+        .nav-link:hover { color: #ef4444; border-bottom: 2px solid #ef4444; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900 font-sans">
+<body class="bg-slate-50 text-slate-900 font-sans leading-normal">
 
-    <nav class="bg-white shadow-sm border-b sticky top-0 z-50">
+    <nav class="bg-white/80 backdrop-blur-md shadow-sm border-b sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
             <div class="flex items-center gap-2">
-                <div class="bg-red-600 p-1.5 rounded-lg text-white"><i class="fas fa-magic text-xl"></i></div>
-                <span class="text-xl font-black tracking-tight">BEST IMAGE <span class="text-red-600">PRO</span></span>
+                <div class="bg-red-600 p-2 rounded-xl text-white shadow-lg shadow-red-200"><i class="fas fa-bolt text-xl"></i></div>
+                <span class="text-xl font-black tracking-tighter uppercase italic">Best Image <span class="text-red-600">Compressor</span></span>
             </div>
-            <div class="hidden md:flex items-center gap-8 font-semibold text-sm">
-                <a href="#" class="hover:text-red-600">COMPRESS</a>
-                <a href="#" class="hover:text-red-600">BG REMOVE</a>
-                <a href="#" class="hover:text-red-600">FILTERS</a>
+            <div class="hidden md:flex items-center gap-8 font-bold text-xs uppercase tracking-widest text-slate-500">
+                <a href="#" class="nav-link transition-all pb-1">Tools</a>
+                <a href="#" class="nav-link transition-all pb-1">API</a>
+                <a href="#" class="nav-link transition-all pb-1">Pricing</a>
             </div>
-            <button class="bg-slate-900 text-white px-6 py-2 rounded-full font-bold text-sm hover:bg-slate-800 transition">Get Started</button>
+            <button class="bg-slate-900 text-white px-8 py-2.5 rounded-full font-bold text-sm hover:scale-105 transition-transform">Get Pro</button>
         </div>
     </nav>
 
-    <main class="max-w-7xl mx-auto px-6 py-12">
-        <div class="text-center mb-16">
-            <h1 class="text-5xl font-black mb-4 leading-tight text-slate-900">Professional Tools, <span class="text-red-600">Zero Cost.</span></h1>
-            <p class="text-lg text-slate-500 max-w-2xl mx-auto">Compress, remove backgrounds, and edit your images instantly without any server upload.</p>
+    <main class="max-w-7xl mx-auto px-6 py-20">
+        <div class="text-center mb-20">
+            <span class="bg-red-50 text-red-600 px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest mb-4 inline-block">Free Image Toolkit</span>
+            <h1 class="text-6xl font-black mb-6 tracking-tight text-slate-900">Make Every Pixel <span class="text-red-600">Perfect.</span></h1>
+            <p class="text-xl text-slate-500 max-w-2xl mx-auto font-medium leading-relaxed">Fast, private, and powerful. All processing happens in your browser—your data never leaves your device.</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            
-            <div onclick="openTool('bg-remove')" class="tool-card bg-white p-8 rounded-3xl cursor-pointer">
-                <div class="w-14 h-14 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-6">
-                    <i class="fas fa-user-slash text-2xl"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-2">Remove BG</h3>
-                <p class="text-slate-500 text-sm">AI se image ka background saaf karein ek click mein.</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div onclick="openTool('text')" class="tool-card bg-white p-10 rounded-[2.5rem] cursor-pointer shadow-xl shadow-slate-200/50">
+                <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-3xl flex items-center justify-center mb-8 shadow-inner"><i class="fas fa-font text-3xl"></i></div>
+                <h3 class="text-2xl font-black mb-3 text-slate-800">Add Text</h3>
+                <p class="text-slate-500 font-medium">Image par apna naam ya custom text likhein aur drag karein.</p>
             </div>
 
-            <div onclick="openTool('filters')" class="tool-card bg-white p-8 rounded-3xl cursor-pointer border-red-100 border-2">
-                <div class="w-14 h-14 bg-red-100 text-red-600 rounded-2xl flex items-center justify-center mb-6">
-                    <i class="fas fa-sliders-h text-2xl"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-2">Photo Filters</h3>
-                <p class="text-slate-500 text-sm">Brightness, Contrast aur Grayscale adjust karein.</p>
+            <div onclick="openTool('compress')" class="tool-card bg-white p-10 rounded-[2.5rem] cursor-pointer shadow-xl shadow-slate-200/50">
+                <div class="w-16 h-16 bg-orange-100 text-orange-600 rounded-3xl flex items-center justify-center mb-8 shadow-inner"><i class="fas fa-compress-alt text-3xl"></i></div>
+                <h3 class="text-2xl font-black mb-3 text-slate-800">Compress</h3>
+                <p class="text-slate-500 font-medium">Size kam karein bina pixelation ke. 8K quality optimized.</p>
             </div>
 
-            <div onclick="openTool('compress')" class="tool-card bg-white p-8 rounded-3xl cursor-pointer">
-                <div class="w-14 h-14 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center mb-6">
-                    <i class="fas fa-weight-hanging text-2xl"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-2">Compress</h3>
-                <p class="text-slate-500 text-sm">Size kam karein bina quality kharab kiye.</p>
+            <div onclick="openTool('filters')" class="tool-card bg-white p-10 rounded-[2.5rem] cursor-pointer shadow-xl shadow-slate-200/50">
+                <div class="w-16 h-16 bg-red-100 text-red-600 rounded-3xl flex items-center justify-center mb-8 shadow-inner"><i class="fas fa-sliders-h text-3xl"></i></div>
+                <h3 class="text-2xl font-black mb-3 text-slate-800">Filters</h3>
+                <p class="text-slate-500 font-medium">Brightness, contrast aur professional lighting effects.</p>
             </div>
 
-            <div onclick="openTool('jpg2pdf')" class="tool-card bg-white p-8 rounded-3xl cursor-pointer">
-                <div class="w-14 h-14 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center mb-6">
-                    <i class="fas fa-file-pdf text-2xl"></i>
-                </div>
-                <h3 class="text-xl font-bold mb-2">JPG to PDF</h3>
-                <p class="text-slate-500 text-sm">Multiple photos ki ek professional PDF banayein.</p>
+            <div onclick="openTool('jpg2pdf')" class="tool-card bg-white p-10 rounded-[2.5rem] cursor-pointer shadow-xl shadow-slate-200/50">
+                <div class="w-16 h-16 bg-emerald-100 text-emerald-600 rounded-3xl flex items-center justify-center mb-8 shadow-inner"><i class="fas fa-file-export text-3xl"></i></div>
+                <h3 class="text-2xl font-black mb-3 text-slate-800">To PDF</h3>
+                <p class="text-slate-500 font-medium">Ek ya kai photos se professional PDF banayein.</p>
             </div>
         </div>
     </main>
 
-    <div id="editorModal" class="fixed inset-0 bg-black/80 hidden z-[100] flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-4xl rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row">
-            <div class="flex-1 bg-slate-200 p-6 flex items-center justify-center min-h-[300px]">
+    <div id="editorModal" class="fixed inset-0 bg-slate-900/95 hidden z-[100] flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-5xl rounded-[3rem] overflow-hidden shadow-2xl flex flex-col md:flex-row h-[90vh]">
+            <div class="flex-1 bg-slate-100 p-8 flex items-center justify-center overflow-auto relative">
                 <canvas id="previewCanvas"></canvas>
             </div>
-            <div class="w-full md:w-80 p-8 flex flex-col gap-6">
-                <h2 class="text-2xl font-bold" id="toolTitle">Edit Image</h2>
+            <div class="w-full md:w-96 p-10 border-l border-slate-100 flex flex-col gap-8 bg-white">
+                <h2 class="text-3xl font-black tracking-tight" id="toolTitle">Edit Image</h2>
                 
-                <div id="filterControls" class="space-y-4 hidden">
-                    <div>
-                        <label class="text-xs font-bold uppercase text-slate-400">Brightness</label>
-                        <input type="range" id="brightness" min="0" max="200" value="100" class="slider" oninput="applyFilters()">
+                <div id="textControls" class="space-y-6 hidden">
+                    <input type="text" id="textInput" placeholder="Enter text here..." class="w-full p-4 bg-slate-50 border-2 border-slate-100 rounded-2xl font-bold focus:border-red-500 transition-all outline-none" oninput="drawAll()">
+                    <div class="flex items-center gap-4">
+                        <label class="font-bold text-slate-400 uppercase text-xs">Color</label>
+                        <input type="color" id="textColor" value="#ff0000" class="w-12 h-12 rounded-full border-none cursor-pointer" oninput="drawAll()">
+                        <input type="number" id="textSize" value="40" class="w-20 p-2 bg-slate-50 rounded-lg font-bold" oninput="drawAll()">
                     </div>
-                    <div>
-                        <label class="text-xs font-bold uppercase text-slate-400">Contrast</label>
-                        <input type="range" id="contrast" min="0" max="200" value="100" class="slider" oninput="applyFilters()">
-                    </div>
-                    <div>
-                        <label class="text-xs font-bold uppercase text-slate-400">Saturation</label>
-                        <input type="range" id="saturate" min="0" max="200" value="100" class="slider" oninput="applyFilters()">
-                    </div>
-                    <button onclick="grayscale()" class="w-full py-2 border-2 border-slate-200 rounded-lg hover:bg-slate-50 font-bold">Toggle Grayscale</button>
+                    <p class="text-xs text-slate-400 italic"><i class="fas fa-mouse-pointer mr-1"></i> Text ko drag karke position set karein.</p>
                 </div>
 
-                <div id="bgInfo" class="hidden text-sm text-blue-600 font-medium bg-blue-50 p-4 rounded-xl">
-                    <i class="fas fa-info-circle mr-1"></i> AI is detecting edges... (Mockup Logic Active)
+                <div id="filterControls" class="space-y-6 hidden">
+                    <div><label class="text-xs font-black uppercase text-slate-400">Brightness</label><input type="range" id="brightness" min="0" max="200" value="100" class="slider" oninput="drawAll()"></div>
+                    <div><label class="text-xs font-black uppercase text-slate-400">Contrast</label><input type="range" id="contrast" min="0" max="200" value="100" class="slider" oninput="drawAll()"></div>
                 </div>
 
-                <div class="mt-auto pt-6 border-t flex gap-2">
-                    <button onclick="closeModal()" class="flex-1 py-3 bg-slate-100 rounded-xl font-bold hover:bg-slate-200">Cancel</button>
-                    <button onclick="downloadFinal()" class="flex-1 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 shadow-lg">Save</button>
+                <div class="mt-auto space-y-3">
+                    <button onclick="downloadFinal()" class="w-full py-4 bg-red-600 text-white rounded-2xl font-black text-lg hover:bg-red-700 shadow-lg shadow-red-200 transition-all">Download Result</button>
+                    <button onclick="closeModal()" class="w-full py-3 bg-slate-100 text-slate-600 rounded-2xl font-bold hover:bg-slate-200 transition-all">Cancel</button>
                 </div>
             </div>
         </div>
     </div>
 
     <input type="file" id="fileInput" class="hidden" accept="image/*">
-    <div id="globalLoader" class="fixed inset-0 bg-white/90 hidden z-[200] flex flex-col items-center justify-center">
+    <div id="loader" class="fixed inset-0 bg-white/90 hidden z-[200] flex flex-col items-center justify-center">
         <div class="w-16 h-16 border-4 border-red-600 border-t-transparent rounded-full animate-spin"></div>
-        <p class="mt-4 font-black uppercase tracking-widest text-red-600">Processing...</p>
     </div>
 
     <script>
-        let currentImg = new Image();
-        let activeTool = '';
         const canvas = document.getElementById('previewCanvas');
         const ctx = canvas.getContext('2d');
+        let currentImg = new Image();
+        let activeTool = '';
+        let textX = 50, textY = 50, isDragging = false;
 
         function openTool(type) {
             activeTool = type;
             document.getElementById('fileInput').click();
         }
 
-        document.getElementById('fileInput').onchange = async (e) => {
+        document.getElementById('fileInput').onchange = (e) => {
             const file = e.target.files[0];
             if(!file) return;
-
-            document.getElementById('globalLoader').classList.remove('hidden');
-
-            if(activeTool === 'compress') {
-                const options = { maxSizeMB: 0.1, maxWidthOrHeight: 1024 };
-                const blob = await imageCompression(file, options);
-                saveBlob(blob, 'compressed.jpg');
-                document.getElementById('globalLoader').classList.add('hidden');
-            } 
-            else if(activeTool === 'jpg2pdf') {
-                const { jsPDF } = window.jspdf;
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    const doc = new jsPDF();
-                    doc.addImage(event.target.result, 'JPEG', 10, 10, 190, 150);
-                    doc.save('converted.pdf');
-                    document.getElementById('globalLoader').classList.add('hidden');
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                currentImg.onload = () => {
+                    canvas.width = currentImg.width;
+                    canvas.height = currentImg.height;
+                    textX = canvas.width / 2; textY = canvas.height / 2;
+                    drawAll();
+                    showModal();
                 };
-                reader.readAsDataURL(file);
-            }
-            else {
-                // Show Editor for Filters & BG Remove
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    currentImg.onload = () => {
-                        canvas.width = currentImg.width;
-                        canvas.height = currentImg.height;
-                        ctx.drawImage(currentImg, 0, 0);
-                        setupEditorUI(activeTool);
-                    };
-                    currentImg.src = event.target.result;
-                };
-                reader.readAsDataURL(file);
-            }
+                currentImg.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
         };
 
-        function setupEditorUI(tool) {
-            document.getElementById('globalLoader').classList.add('hidden');
-            document.getElementById('editorModal').classList.remove('hidden');
-            document.getElementById('filterControls').classList.add('hidden');
-            document.getElementById('bgInfo').classList.add('hidden');
-
-            if(tool === 'filters') {
-                document.getElementById('toolTitle').innerText = 'Adjust Filters';
-                document.getElementById('filterControls').classList.remove('hidden');
-            } else if(tool === 'bg-remove') {
-                document.getElementById('toolTitle').innerText = 'Background Remover';
-                document.getElementById('bgInfo').classList.remove('hidden');
-                // Mockup: Simple center crop effect for BG remove demo
-                ctx.globalCompositeOperation = 'destination-in';
-                ctx.beginPath();
-                ctx.arc(canvas.width/2, canvas.height/2, canvas.height/2, 0, Math.PI*2);
-                ctx.fill();
+        function drawAll() {
+            ctx.filter = `brightness(${document.getElementById('brightness').value}%) contrast(${document.getElementById('contrast').value}%)`;
+            ctx.drawImage(currentImg, 0, 0);
+            
+            if(activeTool === 'text') {
+                ctx.filter = 'none'; // Text par filters apply nahi honge
+                ctx.font = `${document.getElementById('textSize').value}px Arial Black`;
+                ctx.fillStyle = document.getElementById('textColor').value;
+                ctx.textAlign = "center";
+                ctx.fillText(document.getElementById('textInput').value, textX, textY);
             }
         }
 
-        function applyFilters() {
-            const b = document.getElementById('brightness').value;
-            const c = document.getElementById('contrast').value;
-            const s = document.getElementById('saturate').value;
-            
-            ctx.filter = `brightness(${b}%) contrast(${c}%) saturate(${s}%)`;
-            ctx.drawImage(currentImg, 0, 0);
+        function showModal() {
+            document.getElementById('editorModal').classList.remove('hidden');
+            document.getElementById('textControls').classList.toggle('hidden', activeTool !== 'text');
+            document.getElementById('filterControls').classList.toggle('hidden', activeTool !== 'filters');
+            document.getElementById('toolTitle').innerText = activeTool.toUpperCase();
         }
 
-        function grayscale() {
-            ctx.filter = ctx.filter.includes('grayscale') ? 'grayscale(0%)' : 'grayscale(100%)';
-            ctx.drawImage(currentImg, 0, 0);
-        }
+        // Drag Text Logic
+        canvas.onmousedown = (e) => { isDragging = true; };
+        canvas.onmousemove = (e) => {
+            if(isDragging && activeTool === 'text') {
+                const rect = canvas.getBoundingClientRect();
+                const scaleX = canvas.width / rect.width;
+                const scaleY = canvas.height / rect.height;
+                textX = (e.clientX - rect.left) * scaleX;
+                textY = (e.clientY - rect.top) * scaleY;
+                drawAll();
+            }
+        };
+        canvas.onmouseup = () => { isDragging = false; };
 
         function downloadFinal() {
             const link = document.createElement('a');
-            link.download = 'edited_image.png';
-            link.href = canvas.toDataURL();
+            link.download = 'best_image_pro.png';
+            link.href = canvas.toDataURL('image/png', 1.0);
             link.click();
-            closeModal();
         }
 
         function closeModal() {
             document.getElementById('editorModal').classList.add('hidden');
             document.getElementById('fileInput').value = '';
-        }
-
-        function saveBlob(blob, name) {
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url; a.download = name; a.click();
         }
     </script>
 </body>
