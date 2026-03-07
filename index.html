@@ -1,86 +1,101 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Image Compressor Tool</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<title>Universal File Compressor</title>
 
 <style>
 
 body{
-font-family:Arial;
-background:#f2f2f2;
-text-align:center;
-padding:40px;
+font-family: Arial;
+background: linear-gradient(135deg,#4facfe,#00f2fe);
+margin:0;
+padding:0;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
 }
 
-.box{
+.container{
 background:white;
 padding:30px;
-border-radius:10px;
-max-width:500px;
-margin:auto;
-box-shadow:0 0 10px rgba(0,0,0,0.1);
+border-radius:12px;
+box-shadow:0 10px 30px rgba(0,0,0,0.2);
+text-align:center;
+width:400px;
 }
 
-input,select,button{
-width:90%;
-padding:10px;
-margin:10px;
+h1{
+color:#333;
+}
+
+input{
+margin-top:20px;
 }
 
 button{
-background:#28a745;
-color:white;
+margin-top:20px;
+padding:10px 20px;
 border:none;
+background:#4facfe;
+color:white;
+font-size:16px;
+border-radius:6px;
 cursor:pointer;
 }
 
 button:hover{
-background:#218838;
+background:#007bff;
+}
+
+.result{
+margin-top:20px;
+font-weight:bold;
 }
 
 </style>
+
 </head>
 
 <body>
 
-<div class="box">
+<div class="container">
 
-<h2>Online Image Compressor</h2>
+<h1>File Compressor Tool</h1>
 
-<input type="file" id="imageInput" accept="image/*">
+<p>Select File</p>
 
-<select id="format">
-<option value="image/jpeg">JPG</option>
-<option value="image/png">PNG</option>
-<option value="image/webp">WEBP</option>
-</select>
+<input type="file" id="fileInput">
 
-<label>Compression (0.1 – 1)</label>
-<input type="range" id="quality" min="0.1" max="1" step="0.1" value="0.7">
+<br>
 
-<button onclick="compressImage()">Compress Image</button>
+<label>Compression Level</label>
 
-<br><br>
+<input type="range" min="10" max="90" value="50" id="quality">
 
-<a id="downloadLink" style="display:none">Download Image</a>
+<br>
+
+<button onclick="compressFile()">Compress File</button>
+
+<div class="result" id="result"></div>
 
 </div>
 
 <script>
 
-function compressImage(){
+function compressFile(){
 
-let file=document.getElementById("imageInput").files[0];
+let file=document.getElementById("fileInput").files[0];
 
 if(!file){
-alert("Please upload image");
+alert("Please select file");
 return;
 }
 
-let reader=new FileReader();
+let quality=document.getElementById("quality").value/100;
 
-reader.readAsDataURL(file);
+let reader=new FileReader();
 
 reader.onload=function(e){
 
@@ -92,36 +107,39 @@ img.onload=function(){
 
 let canvas=document.createElement("canvas");
 
-canvas.width=img.width;
-canvas.height=img.height;
-
 let ctx=canvas.getContext("2d");
+
+canvas.width=img.width;
+
+canvas.height=img.height;
 
 ctx.drawImage(img,0,0);
 
-let quality=document.getElementById("quality").value;
-
-let format=document.getElementById("format").value;
-
 canvas.toBlob(function(blob){
 
-let url=URL.createObjectURL(blob);
+let newSize=(blob.size/1024).toFixed(2);
 
-let link=document.getElementById("downloadLink");
+let oldSize=(file.size/1024).toFixed(2);
 
-link.href=url;
+document.getElementById("result").innerHTML=
 
-link.download="compressed-image";
+"Old Size: "+oldSize+" KB <br> New Size: "+newSize+" KB";
 
-link.innerHTML="Download Image";
+let link=document.createElement("a");
 
-link.style.display="block";
+link.href=URL.createObjectURL(blob);
 
-},format,quality);
+link.download="compressed-image.jpg";
+
+link.click();
+
+},"image/jpeg",quality);
 
 }
 
 }
+
+reader.readAsDataURL(file);
 
 }
 
