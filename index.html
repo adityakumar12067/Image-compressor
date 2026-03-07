@@ -1,365 +1,307 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ImagePro – Compress Image to 20KB 50KB 100KB</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/browser-image-compression/2.0.2/browser-image-compression.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            scroll-behavior: smooth;
+        }
 
-<title>ImagePro – Compress Image to 20KB 50KB 100KB</title>
+        .dark { background: #0f172a; color: #f8fafc; }
+        
+        /* Glassmorphism Effect */
+        .glass {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
 
-<script src="https://cdn.tailwindcss.com"></script>
+        .dark .glass {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/browser-image-compression/2.0.2/browser-image-compression.min.js"></script>
+        /* Modern Comparison Slider */
+        .comparison {
+            position: relative;
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+            border-radius: 24px;
+            background: #e2e8f0;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
 
-<style>
+        .comparison img {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
 
-body{
-font-family:sans-serif;
-}
+        #afterImg { clip-path: inset(0 0 0 50%); }
 
-.dark{
-background:#0f172a;
-color:white;
-}
+        .slider {
+            position: absolute;
+            top: 0; bottom: 0; left: 50%;
+            width: 4px;
+            background: #ef4444;
+            cursor: ew-resize;
+            z-index: 10;
+        }
 
-.comparison{
-position:relative;
-width:100%;
-height:300px;
-overflow:hidden;
-border-radius:20px;
-background:#000;
-}
+        .slider::after {
+            content: '↔';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px; height: 40px;
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+            font-weight: bold;
+        }
 
-.comparison img{
-position:absolute;
-width:100%;
-height:100%;
-object-fit:contain;
-}
+        /* Tool Buttons */
+        .tool-btn {
+            padding: 14px;
+            border-radius: 16px;
+            background: #f1f5f9;
+            color: #475569;
+            font-weight: 700;
+            transition: 0.3s;
+            border: 2px solid transparent;
+        }
 
-#afterImg{
-clip-path:inset(0 0 0 50%);
-}
+        .dark .tool-btn { background: #1e293b; color: #cbd5e1; }
 
-.slider{
-position:absolute;
-top:0;
-bottom:0;
-left:50%;
-width:4px;
-background:red;
-cursor:ew-resize;
-}
+        .tool-btn:hover { transform: translateY(-2px); border-color: #ef4444; }
 
-.tool-btn{
-padding:12px;
-border-radius:10px;
-background:#1e293b;
-color:white;
-font-weight:bold;
-}
+        .tool-btn.active {
+            background: #ef4444 !important;
+            color: white !important;
+            box-shadow: 0 10px 15px -3px rgba(239, 68, 68, 0.3);
+        }
 
-.tool-btn.active{
-background:red;
-}
+        #dropArea {
+            transition: 0.3s;
+            border: 3px dashed #cbd5e1;
+        }
 
-</style>
+        #dropArea:hover {
+            border-color: #ef4444;
+            background: #fffafa;
+        }
 
+        .dark #dropArea:hover { background: #1e293b; }
+    </style>
 </head>
 
-<body class="bg-gray-100 dark:bg-slate-900">
-
-<!-- NAVBAR -->
-
-<nav class="flex justify-between p-4 bg-white shadow">
-
-<h1 class="font-bold text-xl">ImagePro</h1>
-
-<button onclick="toggleDark()">Dark</button>
-
-</nav>
-
-<!-- HEADER -->
-
-<section class="text-center p-10">
-
-<h1 class="text-4xl font-bold mb-6">
-Compress Image to 20KB 50KB 100KB
-</h1>
-
-<div id="dropArea"
-class="border-4 border-dashed p-10 rounded-xl bg-white cursor-pointer">
-
-Drop Image Here
-
-</div>
-
-<input type="file" id="fileInput" hidden accept="image/*">
-
-</section>
-
-<!-- EDITOR -->
-
-<section id="editor" class="hidden max-w-4xl mx-auto p-6">
-
-<div class="comparison mb-6">
-
-<img id="beforeImg">
-
-<img id="afterImg">
-
-<div class="slider" id="slider"></div>
-
-</div>
-
-<div class="grid grid-cols-4 gap-3 mb-6">
-
-<button class="tool-btn active" onclick="setTarget(20,this)">20KB</button>
-
-<button class="tool-btn" onclick="setTarget(50,this)">50KB</button>
-
-<button class="tool-btn" onclick="setTarget(100,this)">100KB</button>
-
-<button class="tool-btn" onclick="setTarget(200,this)">200KB</button>
-
-</div>
-
-<div class="flex gap-3 mb-6">
-
-<button onclick="convertPNG()" class="tool-btn">
-PNG → JPG
-</button>
-
-<button onclick="resizeImage()" class="tool-btn">
-Resize
-</button>
-
-<button onclick="generateBase64()" class="tool-btn">
-Base64
-</button>
-
-</div>
-
-<div class="flex justify-between mb-6">
-
-<p>Original: <span id="origSize"></span></p>
-
-<p>Compressed: <span id="newSize"></span></p>
-
-</div>
-
-<button onclick="downloadImage()"
-class="w-full bg-red-600 text-white p-4 rounded-xl">
-
-Download Image
-
-</button>
-
-</section>
-
-<!-- SEO CONTENT -->
-
-<section class="max-w-4xl mx-auto p-10 text-center">
-
-<h2 class="text-3xl font-bold mb-4">
-
-Free Online Image Compressor
-
-</h2>
-
-<p>
-
-Compress images to 20KB, 50KB, 100KB for job forms,
-government forms and exam applications.
-
-</p>
-
-</section>
-
-<!-- TOOLS GRID -->
-
-<section class="max-w-5xl mx-auto p-10">
-
-<h2 class="text-2xl font-bold mb-6 text-center">
-More Image Tools
-</h2>
-
-<div class="grid md:grid-cols-3 gap-6">
-
-<div class="p-6 bg-white shadow rounded-xl">
-Image Compressor
-</div>
-
-<div class="p-6 bg-white shadow rounded-xl">
-PNG to JPG Converter
-</div>
-
-<div class="p-6 bg-white shadow rounded-xl">
-Image Resizer
-</div>
-
-<div class="p-6 bg-white shadow rounded-xl">
-Image to Base64
-</div>
-
-<div class="p-6 bg-white shadow rounded-xl">
-JPG to PNG
-</div>
-
-<div class="p-6 bg-white shadow rounded-xl">
-Image Crop Tool
-</div>
-
-</div>
-
-</section>
-
-<!-- ADS -->
-
-<section class="max-w-4xl mx-auto p-10">
-
-<div class="border-2 border-dashed p-10 text-center">
-
-AdSense Ad Space
-
-</div>
-
-</section>
-
-<!-- FAQ -->
-
-<section class="max-w-4xl mx-auto p-10">
-
-<h2 class="text-2xl font-bold mb-6">FAQ</h2>
-
-<p><b>How to compress image to 50KB?</b></p>
-<p>Upload image and choose 50KB option.</p>
-
-<br>
-
-<p><b>Is this tool free?</b></p>
-<p>Yes, it works in your browser.</p>
-
-</section>
-
-<script>
-
-let currentFile
-let compressedBlob
-let targetKB=20
-
-const beforeImg=document.getElementById("beforeImg")
-const afterImg=document.getElementById("afterImg")
-
-document.getElementById("dropArea").onclick=()=>{
-document.getElementById("fileInput").click()
-}
-
-document.getElementById("fileInput").onchange=e=>{
-loadFile(e.target.files[0])
-}
-
-function loadFile(file){
-
-currentFile=file
-
-beforeImg.src=URL.createObjectURL(file)
-
-document.getElementById("origSize").innerText=
-(file.size/1024).toFixed(1)+" KB"
-
-document.getElementById("editor").classList.remove("hidden")
-
-compress()
-
-}
-
-function setTarget(kb,btn){
-
-targetKB=kb
-
-document.querySelectorAll(".tool-btn")
-.forEach(b=>b.classList.remove("active"))
-
-btn.classList.add("active")
-
-compress()
-
-}
-
-async function compress(){
-
-const options={
-maxSizeMB:targetKB/1024,
-maxWidthOrHeight:1920,
-useWebWorker:true
-}
-
-compressedBlob=
-await imageCompression(currentFile,options)
-
-afterImg.src=URL.createObjectURL(compressedBlob)
-
-document.getElementById("newSize").innerText=
-(compressedBlob.size/1024).toFixed(1)+" KB"
-
-}
-
-function downloadImage(){
-
-const a=document.createElement("a")
-
-a.href=URL.createObjectURL(compressedBlob)
-
-a.download="compressed_"+currentFile.name
-
-a.click()
-
-}
-
-function convertPNG(){
-
-alert("Converted to JPG")
-
-}
-
-function resizeImage(){
-
-alert("Resize tool")
-
-}
-
-function generateBase64(){
-
-alert("Base64 generated")
-
-}
-
-function toggleDark(){
-
-document.body.classList.toggle("dark")
-
-}
-
-const slider=document.getElementById("slider")
-const comparison=document.querySelector(".comparison")
-
-comparison.addEventListener("mousemove",e=>{
-
-const rect=comparison.getBoundingClientRect()
-
-let x=e.clientX-rect.left
-
-const percent=(x/rect.width)*100
-
-slider.style.left=percent+"%"
-
-afterImg.style.clipPath=`inset(0 0 0 ${percent}%)`
-
-})
-
-</script>
-
+<body class="bg-slate-50 text-slate-900 transition-colors">
+
+    <nav class="sticky top-0 z-50 glass flex justify-between items-center px-8 py-4">
+        <div class="flex items-center gap-2">
+            <div class="bg-red-600 p-2 rounded-xl text-white shadow-lg shadow-red-200">
+                <i class="fas fa-bolt"></i>
+            </div>
+            <h1 class="font-extrabold text-2xl tracking-tighter uppercase">Image<span class="text-red-600">Pro</span></h1>
+        </div>
+        <button onclick="toggleDark()" class="p-3 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition">
+            <i class="fas fa-moon"></i>
+        </button>
+    </nav>
+
+    <section class="max-w-4xl mx-auto text-center py-20 px-6">
+        <h1 class="text-5xl md:text-6xl font-extrabold mb-6 tracking-tight leading-tight">
+            Compress Images <br><span class="text-red-600">Without Losing Quality</span>
+        </h1>
+        <p class="text-slate-500 dark:text-slate-400 text-lg mb-12 font-medium">
+            The easiest way to optimize photos for SSC, UPSC, and Gov forms.
+        </p>
+
+        <div id="dropArea" class="max-w-2xl mx-auto p-16 rounded-[3rem] bg-white dark:bg-slate-800 shadow-xl cursor-pointer group">
+            <div class="mb-6 inline-block p-6 bg-red-50 dark:bg-slate-700 rounded-full text-red-600 group-hover:scale-110 transition">
+                <i class="fas fa-cloud-upload-alt text-4xl"></i>
+            </div>
+            <p class="text-xl font-bold mb-2">Drop Image Here</p>
+            <p class="text-slate-400 text-sm uppercase tracking-widest font-bold">Or Click to Browse</p>
+        </div>
+        <input type="file" id="fileInput" hidden accept="image/*">
+    </section>
+
+    <section id="editor" class="hidden max-w-5xl mx-auto p-6 mb-20 animate-in fade-in duration-500">
+        <div class="grid lg:grid-cols-3 gap-10">
+            
+            <div class="lg:col-span-2">
+                <div class="comparison mb-4" id="comparisonBox">
+                    <img id="beforeImg">
+                    <img id="afterImg">
+                    <div class="slider" id="slider"></div>
+                    <div class="absolute bottom-4 left-4 glass px-4 py-2 rounded-lg text-xs font-bold uppercase">Original</div>
+                    <div class="absolute bottom-4 right-4 glass px-4 py-2 rounded-lg text-xs font-bold uppercase text-red-600">Optimized</div>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <div class="bg-white dark:bg-slate-800 p-8 rounded-[2rem] shadow-lg">
+                    <h3 class="font-black text-sm uppercase tracking-widest text-slate-400 mb-6">Target Size</h3>
+                    <div class="grid grid-cols-2 gap-3 mb-8">
+                        <button class="tool-btn active" onclick="setTarget(20,this)">20KB</button>
+                        <button class="tool-btn" onclick="setTarget(50,this)">50KB</button>
+                        <button class="tool-btn" onclick="setTarget(100,this)">100KB</button>
+                        <button class="tool-btn" onclick="setTarget(200,this)">200KB</button>
+                    </div>
+
+                    <h3 class="font-black text-sm uppercase tracking-widest text-slate-400 mb-4">Quick Tools</h3>
+                    <div class="flex flex-wrap gap-2 mb-8">
+                        <button onclick="convertPNG()" class="flex-1 py-3 px-4 rounded-xl bg-slate-100 dark:bg-slate-700 font-bold text-xs hover:bg-red-50">PNG → JPG</button>
+                        <button onclick="resizeImage()" class="flex-1 py-3 px-4 rounded-xl bg-slate-100 dark:bg-slate-700 font-bold text-xs hover:bg-red-50">RESIZE</button>
+                    </div>
+
+                    <div class="p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl mb-8 space-y-2">
+                        <div class="flex justify-between text-xs font-bold">
+                            <span class="text-slate-400">ORIGINAL</span>
+                            <span id="origSize">0 KB</span>
+                        </div>
+                        <div class="flex justify-between text-xs font-bold text-red-600">
+                            <span>COMPRESSED</span>
+                            <span id="newSize">0 KB</span>
+                        </div>
+                    </div>
+
+                    <button onclick="downloadImage()" class="w-full bg-red-600 text-white p-5 rounded-2xl font-black text-lg shadow-xl shadow-red-200 hover:scale-[1.02] transition">
+                        DOWNLOAD IMAGE
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="max-w-6xl mx-auto p-10 bg-white dark:bg-slate-800 rounded-[3rem] shadow-sm mb-20">
+        <h2 class="text-3xl font-black mb-12 text-center tracking-tight">Powerful Features</h2>
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="p-8 rounded-3xl border border-slate-100 dark:border-slate-700 hover:shadow-xl transition group">
+                <div class="text-red-600 text-2xl mb-4"><i class="fas fa-compress-arrows-alt"></i></div>
+                <h4 class="font-black mb-2">Smart Compression</h4>
+                <p class="text-sm text-slate-400">Reduce file size while keeping text sharp and clear.</p>
+            </div>
+            <div class="p-8 rounded-3xl border border-slate-100 dark:border-slate-700 hover:shadow-xl transition">
+                <div class="text-blue-500 text-2xl mb-4"><i class="fas fa-shield-alt"></i></div>
+                <h4 class="font-black mb-2">Privacy First</h4>
+                <p class="text-sm text-slate-400">No images are uploaded. Everything happens in your browser.</p>
+            </div>
+            <div class="p-8 rounded-3xl border border-slate-100 dark:border-slate-700 hover:shadow-xl transition">
+                <div class="text-green-500 text-2xl mb-4"><i class="fas fa-bolt"></i></div>
+                <h4 class="font-black mb-2">Instant Preview</h4>
+                <p class="text-sm text-slate-400">Use the slider to see quality before you download.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="max-w-4xl mx-auto p-10 mb-20">
+        <h2 class="text-4xl font-black mb-12 text-center">Frequently Asked Questions</h2>
+        <div class="space-y-6">
+            <details class="group bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-sm cursor-pointer" open>
+                <summary class="font-bold text-lg list-none flex justify-between items-center">
+                    How do I compress an image to 50KB?
+                    <span class="group-open:rotate-180 transition">↓</span>
+                </summary>
+                <p class="mt-4 text-slate-500">Simply drag and drop your image, click on the '50KB' button, and our tool will automatically optimize it to your target size.</p>
+            </details>
+            <details class="group bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-sm cursor-pointer">
+                <summary class="font-bold text-lg list-none flex justify-between items-center">
+                    Is my data safe?
+                    <span class="group-open:rotate-180 transition">↓</span>
+                </summary>
+                <p class="mt-4 text-slate-500">Yes! ImagePro works offline in your browser. Your photos never reach our servers.</p>
+            </details>
+        </div>
+    </section>
+
+    <script>
+        let currentFile;
+        let compressedBlob;
+        let targetKB = 20;
+
+        const beforeImg = document.getElementById("beforeImg");
+        const afterImg = document.getElementById("afterImg");
+        const slider = document.getElementById("slider");
+        const comparisonBox = document.getElementById("comparisonBox");
+
+        document.getElementById("dropArea").onclick = () => document.getElementById("fileInput").click();
+
+        document.getElementById("fileInput").onchange = e => loadFile(e.target.files[0]);
+
+        function loadFile(file) {
+            if (!file) return;
+            currentFile = file;
+            beforeImg.src = URL.createObjectURL(file);
+            document.getElementById("origSize").innerText = (file.size / 1024).toFixed(1) + " KB";
+            document.getElementById("editor").classList.remove("hidden");
+            // Scroll to editor
+            document.getElementById("editor").scrollIntoView({ behavior: 'smooth' });
+            compress();
+        }
+
+        function setTarget(kb, btn) {
+            targetKB = kb;
+            document.querySelectorAll(".tool-btn").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+            compress();
+        }
+
+        async function compress() {
+            if (!currentFile) return;
+            const options = {
+                maxSizeMB: targetKB / 1024,
+                maxWidthOrHeight: 1920,
+                useWebWorker: true
+            };
+            compressedBlob = await imageCompression(currentFile, options);
+            afterImg.src = URL.createObjectURL(compressedBlob);
+            document.getElementById("newSize").innerText = (compressedBlob.size / 1024).toFixed(1) + " KB";
+        }
+
+        function downloadImage() {
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(compressedBlob);
+            a.download = "ImagePro_" + currentFile.name;
+            a.click();
+        }
+
+        function toggleDark() {
+            document.body.classList.toggle("dark");
+        }
+
+        // Slider Interaction Logic
+        const moveSlider = (e) => {
+            const rect = comparisonBox.getBoundingClientRect();
+            let x = (e.pageX || e.touches[0].pageX) - rect.left - window.scrollX;
+            if (x < 0) x = 0;
+            if (x > rect.width) x = rect.width;
+            const percent = (x / rect.width) * 100;
+            slider.style.left = percent + "%";
+            afterImg.style.clipPath = `inset(0 0 0 ${percent}%)`;
+        };
+
+        comparisonBox.addEventListener("mousemove", moveSlider);
+        comparisonBox.addEventListener("touchmove", (e) => moveSlider(e.touches[0]));
+
+        // Placeholder functions for tools
+        function convertPNG() { alert("Ready for JPG conversion!"); }
+        function resizeImage() { alert("Resize Tool selected!"); }
+    </script>
 </body>
 </html>
