@@ -325,29 +325,4 @@
             fileInput.value = '';
             fileList.innerHTML = '';
             resultsContainer.innerHTML = '';
-            settingsPanel.classList.add('hidden');
-            resultsArea.classList.add('hidden');
-        });
-
-        // Compress Button
-        compressBtn.addEventListener('click', async () => {
-            if (selectedFiles.length === 0) return;
-
-            // UI Loading State
-            compressBtn.disabled = true;
-            loader.style.display = 'block';
-            compressBtn.querySelector('span').textContent = 'Compressing...';
-
-            try {
-                const options = {
-                    maxSizeMB: 1,
-                    maxWidthOrHeight: 1920,
-                    useWebWorker: true,
-                    initialQuality: parseInt(qualitySlider.value) / 100
-                };
-
-                // Check if user wants specific size
-                const targetVal = parseFloat(targetSizeInput.value);
-                const unit = unitSelect.value;
-
-                if (!isNaN(target
+           
