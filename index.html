@@ -319,6 +319,99 @@
         }
 
         // Reset Button
+resetBtn.addEventListener('click', () => {
+    selectedFiles = [];
+    compressedFiles = [];
+    fileInput.value = '';
+    fileList.innerHTML = '';
+    resultsContainer.innerHTML = '';
+    settingsPanel.classList.add('hidden');
+    resultsArea.classList.add('hidden');
+});
+
+
+// Compress Button
+compressBtn.addEventListener('click', async () => {
+
+    if (selectedFiles.length === 0) {
+        alert("Please select an image first");
+        return;
+    }
+
+    loader.style.display = "block";
+    compressBtn.disabled = true;
+
+    resultsContainer.innerHTML = "";
+
+    const quality = qualitySlider.value / 100;
+
+    let targetSize = targetSizeInput.value;
+    let unit = unitSelect.value;
+
+    if (targetSize) {
+        if (unit === "MB") {
+            targetSize = targetSize * 1024 * 1024;
+        } else {
+            targetSize = targetSize * 1024;
+        }
+    }
+
+    for (let file of selectedFiles) {
+
+        const options = {
+            maxSizeMB: targetSize ? targetSize / (1024 * 1024) : 1,
+            maxWidthOrHeight: 1920,
+            useWebWorker: true,
+            initialQuality: quality
+        };
+
+        try {
+
+            const compressedFile = await imageCompression(file, options);
+
+            showResult(file, compressedFile);
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    loader.style.display = "none";
+    compressBtn.disabled = false;
+
+    resultsArea.classList.remove("hidden");
+
+});
+
+
+// Show Result
+function showResult(original, compressed) {
+
+    const url = URL.createObjectURL(compressed);
+
+    const card = document.createElement("div");
+    card.className = "result-card bg-white dark:bg-gray-800 rounded-xl p-4 shadow";
+
+    card.innerHTML = `
+        <img src="${url}" class="rounded-lg mb-3 w-full h-40 object-cover">
+
+        <div class="text-sm space-y-1">
+        <p><b>Original:</b> ${formatBytes(original.size)}</p>
+        <p><b>Compressed:</b> ${formatBytes(compressed.size)}</p>
+
+        <p class="text-green-500 font-semibold">
+        Saved ${(100 - (compressed.size / original.size * 100)).toFixed(1)}%
+        </p>
+        </div>
+
+        <a href="${url}" download="compressed-${original.name}" 
+        class="block mt-3 text-center bg-primary text-white py-2 rounded-lg">
+        Download
+        </a>
+    `;
+
+    resultsContainer.appendChild(card);
+}
         resetBtn.addEventListener('click', () => {
             selectedFiles = [];
             compressedFiles = [];
