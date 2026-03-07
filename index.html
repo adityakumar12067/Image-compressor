@@ -1,150 +1,443 @@
+<think>
+Thinking Process:
+
+1.  **Analyze the Request:**
+    *   User wants "H jita chij usme hota hai sab dal do" (Hindi for "Put everything that should be in there, put it all").
+    *   Context: Previous request was for an image compressor website code for GitHub.
+    *   Interpretation: The user feels the previous code might be missing some features or wants a more complete, robust solution. They want *everything* included (maybe more features, better error handling, more file types, better UI, maybe a footer, about section, etc.). They want a "complete package" ready for GitHub.
+    *   Goal: Provide a comprehensive, production-ready HTML/CSS/JS file that includes all necessary features for a professional image compressor site, ready to deploy on GitHub Pages.
+
+2.  **Identify Missing/Enhanced Features:**
+    *   **Previous Code:** Basic compression, target size, drag & drop, download.
+    *   **Enhancements Needed:**
+        *   Better error handling (file type validation, size limits).
+        *   Multiple file support (batch processing) - *Wait, GitHub Pages is static. Batch processing with many files might be heavy on the browser, but possible. Let's stick to single file for stability unless I can make it robust. Actually, multiple file support is a "must-have" for a professional tool.*
+        *   More file type icons/labels.
+        *   Footer with copyright/links.
+        *   Dark mode toggle (very popular).
+        *   Better loading states.
+        *   History/Recent files (using LocalStorage).
+        *   More detailed stats (dimensions, format).
+        *   SEO meta tags.
+        *   PWA manifest (optional but good for "professional").
+        *   Privacy policy disclaimer (since it's client-side, mention it).
+
+3.  **Decision:**
+    *   Keep it single-file (`index.html`) for easy GitHub upload.
+    *   Include all CSS/JS inline.
+    *   Add Batch Processing (Multiple files).
+    *   Add Dark Mode.
+    *   Add File Info (Dimensions, Format).
+    *   Add Footer.
+    *   Add SEO Meta Tags.
+    *   Ensure it's fully responsive.
+    *   Use `browser-image-compression` library (as before) but handle multiple files better.
+
+4.  **Drafting the Code:**
+    *   **HTML Structure:** Header, Main Content (Upload, Settings, Results), Footer.
+    *   **CSS:** Tailwind via CDN (fastest for single file), custom styles for dark mode, animations.
+    *   **JS:**
+        *   Handle multiple file selection.
+        *   Process files one by one (async/await loop).
+        *   Show progress bar.
+        *   Show list of processed files.
+        *   Download all (Zip? No, too complex for pure client-side without libraries like JSZip. Let's stick to individual downloads or a "Download All" button that triggers multiple downloads, or just list them). *Correction:* Triggering multiple downloads at once is often blocked by browsers. Better to show a list of results with individual download buttons.
+        *   Dark mode toggle logic.
+        *   LocalStorage for recent settings.
+
+5.  **Refining the "Everything" aspect:**
+    *   User said "sab dal do" (put everything). I should include:
+        *   SEO Meta Tags.
+        *   Favicon (placeholder).
+        *   Privacy Notice.
+        *   Contact/About section.
+        *   Social Links.
+        *   Error Handling.
+        *   Responsive Design.
+        *   Dark/Light Theme.
+        *   Batch Processing.
+        *   Compression Quality Slider.
+        *   Target Size Input (KB/MB).
+        *   Image Preview.
+        *   Size Comparison.
+
+6.  **Writing the Code (Mental Check):**
+    *   Need to make sure the `browser-image-compression` library supports multiple files well. It processes one at a time. I'll need a queue system.
+    *   Dark mode needs to be persistent (localStorage).
+    *   Make sure the UI doesn't break with many files.
+
+7.  **Final Polish:**
+    *   Add comments in Hindi/English for clarity.
+    *   Ensure the code is copy-paste ready.
+    *   Add instructions on how to deploy.
+
+8.  **Output Generation:** (Proceeding to generate the comprehensive code).
+    *   *Self-Correction:* Keep it simple enough to not crash the browser but feature-rich. I will add a "Batch Mode" toggle.
+    *   *Self-Correction:* Ensure the "KB to MB" logic is clear in the UI.
+
+9.  **Final Review against User Request:** "H jita chij usme hota hai sab dal do" -> "Put everything that should be in there". I will make it a full-featured landing page + tool.
+
+    *   **Features to include:**
+        1.  Drag & Drop (Single & Multiple).
+        2.  Dark/Light Mode.
+        3.  Quality Slider.
+        4.  Target Size (KB/MB).
+        5.  Real-time Preview.
+        6.  Size Comparison (Original vs Compressed).
+        7.  Download Button.
+        8.  Footer with Links.
+        9.  SEO Meta Tags.
+        10. Privacy Notice (Client-side processing).
+        11. Responsive Design.
+        12. Loading Animations.
+        13. Error Handling.
+
+    Let's build this.
+
+    *(Self-Correction during coding)*: I need to make sure the `browser-image-compression` script is loaded correctly. I will use the CDN link.
+    I will add a "Reset" button.
+    I will add a "Clear All" button for batch results.
+
+    Okay, ready to write.
+
+    *(Wait, one more thing)*: The user might not know how to handle multiple files in a single HTML file without a backend. I will implement a queue system in JS so it processes sequentially to avoid freezing the browser.
+
+    Let's go.
+
+    *(Final check)*: Ensure the language is Hindi/English mix as per user's previous prompt style, but code comments in English for standard practice.
+
+    *(Wait, user said "H jita chij usme hota hai sab dal do")*: This implies they want a *complete* solution, maybe even including a `README.md` for GitHub, or just the full code. I will provide the full `index.html` and a brief `README.md` content for the repo.
+
+    Let's focus on the `index.html` being the "complete package".
+
+    Okay, plan:
+    1.  Full HTML5 structure.
+    2.  Tailwind CSS (CDN).
+    3.  FontAwesome (CDN) for icons.
+    4.  JS Logic for compression, batch, dark mode, etc.
+    5.  Footer, SEO, Privacy.
+
+    Let's write it.cw
+
+</think>Samajh gaya! Aapko **Complete Professional Package** chahiye. Isme maine **Dark Mode, Batch Processing (Multiple Files), Quality Slider, Target Size (KB/MB), SEO Tags, Footer, Privacy Policy, aur Error Handling** sab kuch add kar diya hai.
+
+Ye code **100% Ready-to-Deploy** hai. Bas isse `index.html` naam se save karke GitHub par upload karein.
+
+### 🚀 Complete Professional Image Compressor Code (`index.html`)
+
+```html
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="light">
 <head>
-<meta charset="UTF-8">
-<title>Universal File Compressor</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Free Online Image Compressor. Compress JPG, PNG, WebP images to KB or MB size without losing quality. Secure client-side processing.">
+    <meta name="keywords" content="image compressor, reduce image size, kb to mb, mb to kb, free online tool, github pages">
+    <meta name="author" content="Your Name">
+    <title>Pro Image Compressor | Reduce Size KB to MB</title>
+    
+    <!-- Tailwind CSS (Styling) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome (Icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Image Compression Library -->
+    <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.js"></script>
 
-<style>
+    <!-- Tailwind Config for Dark Mode -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#10b981',
+                        dark: '#1f2937',
+                        darker: '#111827'
+                    }
+                }
+            }
+        }
+    </script>
 
-body{
-font-family: Arial;
-background: linear-gradient(135deg,#4facfe,#00f2fe);
-margin:0;
-padding:0;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-}
-
-.container{
-background:white;
-padding:30px;
-border-radius:12px;
-box-shadow:0 10px 30px rgba(0,0,0,0.2);
-text-align:center;
-width:400px;
-}
-
-h1{
-color:#333;
-}
-
-input{
-margin-top:20px;
-}
-
-button{
-margin-top:20px;
-padding:10px 20px;
-border:none;
-background:#4facfe;
-color:white;
-font-size:16px;
-border-radius:6px;
-cursor:pointer;
-}
-
-button:hover{
-background:#007bff;
-}
-
-.result{
-margin-top:20px;
-font-weight:bold;
-}
-
-</style>
-
+    <style>
+        /* Custom Animations */
+        .fade-in { animation: fadeIn 0.5s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        /* Drop Zone */
+        .drop-zone { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .drop-zone:hover, .drop-zone.dragover { border-color: #3b82f6; background-color: #eff6ff; transform: scale(1.01); }
+        .dark .drop-zone:hover, .dark .drop-zone.dragover { background-color: #1e3a8a; }
+        
+        /* Loader */
+        .loader { border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top: 3px solid #fff; width: 20px; height: 20px; animation: spin 1s linear infinite; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
 </head>
+<body class="bg-gray-50 text-gray-800 dark:bg-darker dark:text-gray-100 min-h-screen flex flex-col transition-colors duration-300">
 
-<body>
+    <!-- Navbar -->
+    <nav class="w-full bg-white dark:bg-dark shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-compress text-primary text-2xl"></i>
+                    <span class="font-bold text-xl tracking-tight">ImgCompress</span>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                        <i class="fa-solid fa-moon dark:hidden"></i>
+                        <i class="fa-solid fa-sun hidden dark:inline text-yellow-400"></i>
+                    </button>
+                    <a href="#footer" class="text-sm font-medium hover:text-primary transition">About</a>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-<div class="container">
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-4 py-8 max-w-5xl">
+        
+        <!-- Hero Section -->
+        <div class="text-center mb-10 fade-in">
+            <h1 class="text-4xl md:text-5xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-green-500">
+                Compress Images Instantly
+            </h1>
+            <p class="text-gray-600 dark:text-gray-400 text-lg max-w-2xl mx-auto">
+                Reduce image size from KB to MB or vice versa. Secure, fast, and runs entirely in your browser. No server uploads.
+            </p>
+        </div>
 
-<h1>File Compressor Tool</h1>
+        <!-- Tool Card -->
+        <div class="bg-white dark:bg-dark rounded-2xl shadow-xl p-6 md:p-8 border border-gray-100 dark:border-gray-700">
+            
+            <!-- Upload Area -->
+            <div id="drop-zone" class="drop-zone rounded-xl p-10 text-center cursor-pointer relative border-2 border-dashed border-gray-300 dark:border-gray-600 mb-6">
+                <input type="file" id="file-input" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept="image/*" multiple>
+                <div class="pointer-events-none">
+                    <div class="bg-blue-50 dark:bg-blue-900/30 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fa-solid fa-cloud-arrow-up text-3xl text-primary"></i>
+                    </div>
+                    <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">Click to upload or drag & drop</p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Supports JPG, PNG, WEBP, GIF (Max 20MB)</p>
+                </div>
+            </div>
 
-<p>Select File</p>
+            <!-- Settings Panel (Hidden initially) -->
+            <div id="settings-panel" class="hidden bg-gray-50 dark:bg-gray-800 rounded-xl p-5 mb-6 border border-gray-200 dark:border-gray-700 fade-in">
+                <div class="flex flex-col md:flex-row gap-6">
+                    
+                    <!-- File Info -->
+                    <div class="flex-1">
+                        <h3 class="text-sm font-bold text-gray-500 uppercase mb-2">Selected Files</h3>
+                        <div id="file-list" class="space-y-2 max-h-32 overflow-y-auto pr-2">
+                            <!-- File items will be injected here -->
+                        </div>
+                    </div>
 
-<input type="file" id="fileInput">
+                    <!-- Compression Options -->
+                    <div class="flex-1 space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Compression Quality</label>
+                            <input type="range" id="quality-slider" min="10" max="100" value="80" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary">
+                            <div class="flex justify-between text-xs text-gray-500 mt-1">
+                                <span>Low</span>
+                                <span id="quality-val">80%</span>
+                                <span>High</span>
+                            </div>
+                        </div>
 
-<br>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Target Size (Optional)</label>
+                            <div class="flex gap-2">
+                                <input type="number" id="target-size" placeholder="e.g. 500" class="flex-1 p-2 border rounded-lg dark:bg-gray-700 dark:border-gray-600 focus:ring-2 focus:ring-primary outline-none">
+                                <select id="unit-select" class="border rounded-lg dark:bg-gray-700 dark:border-gray-600 px-2">
+                                    <option value="KB">KB</option>
+                                    <option value="MB">MB</option>
+                                </select>
+                            </div>
+                            <p class="text-xs text-gray-400 mt-1">Leave empty for default quality</p>
+                        </div>
+                    </div>
+                </div>
 
-<label>Compression Level</label>
+                <div class="mt-6 flex gap-3">
+                    <button id="compress-btn" class="flex-1 bg-primary hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-lg transition transform hover:-translate-y-0.5 flex justify-center items-center gap-2">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        <span>Compress All</span>
+                        <div class="loader" id="loader"></div>
+                    </button>
+                    <button id="reset-btn" class="px-6 py-3 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                        <i class="fa-solid fa-rotate-right"></i>
+                    </button>
+                </div>
+            </div>
 
-<input type="range" min="10" max="90" value="50" id="quality">
+            <!-- Results Area (Hidden initially) -->
+            <div id="results-area" class="hidden fade-in">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold">Results</h3>
+                    <button id="download-all-btn" class="text-sm text-green-600 hover:text-green-700 font-medium hidden">
+                        <i class="fa-solid fa-download"></i> Download All
+                    </button>
+                </div>
+                
+                <div id="results-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Result Cards will be injected here -->
+                </div>
+            </div>
 
-<br>
+        </div>
 
-<button onclick="compressFile()">Compress File</button>
+        <!-- Features Section -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 text-center">
+            <div class="p-6 bg-white dark:bg-dark rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                <i class="fa-solid fa-shield-halved text-3xl text-primary mb-3"></i>
+                <h3 class="font-bold mb-2">100% Secure</h3>
+                <p class="text-sm text-gray-500">Images are processed locally in your browser. Nothing is uploaded to any server.</p>
+            </div>
+            <div class="p-6 bg-white dark:bg-dark rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                <i class="fa-solid fa-bolt text-3xl text-yellow-500 mb-3"></i>
+                <h3 class="font-bold mb-2">Super Fast</h3>
+                <p class="text-sm text-gray-500">Optimized compression algorithm ensures quick results without lag.</p>
+            </div>
+            <div class="p-6 bg-white dark:bg-dark rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+                <i class="fa-solid fa-mobile-screen text-3xl text-green-500 mb-3"></i>
+                <h3 class="font-bold mb-2">Mobile Friendly</h3>
+                <p class="text-sm text-gray-500">Works perfectly on desktop, tablet, and mobile devices.</p>
+            </div>
+        </div>
 
-<div class="result" id="result"></div>
+    </main>
 
-</div>
+    <!-- Footer -->
+    <footer id="footer" class="bg-white dark:bg-dark border-t border-gray-200 dark:border-gray-700 mt-12">
+        <div class="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <span class="font-bold text-lg">ImgCompress</span>
+                    <p class="text-sm text-gray-500 mt-1">© 2023 All rights reserved.</p>
+                </div>
+                <div class="flex gap-6 text-sm text-gray-500">
+                    <a href="#" class="hover:text-primary">Privacy Policy</a>
+                    <a href="#" class="hover:text-primary">Terms of Service</a>
+                    <a href="#" class="hover:text-primary">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
 
-<script>
+    <!-- JavaScript Logic -->
+    <script>
+        // DOM Elements
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const settingsPanel = document.getElementById('settings-panel');
+        const fileList = document.getElementById('file-list');
+        const compressBtn = document.getElementById('compress-btn');
+        const loader = document.getElementById('loader');
+        const resultsArea = document.getElementById('results-area');
+        const resultsContainer = document.getElementById('results-container');
+        const qualitySlider = document.getElementById('quality-slider');
+        const qualityVal = document.getElementById('quality-val');
+        const targetSizeInput = document.getElementById('target-size');
+        const unitSelect = document.getElementById('unit-select');
+        const resetBtn = document.getElementById('reset-btn');
+        const themeToggle = document.getElementById('theme-toggle');
+        const downloadAllBtn = document.getElementById('download-all-btn');
 
-function compressFile(){
+        // State
+        let selectedFiles = [];
+        let compressedFiles = [];
 
-let file=document.getElementById("fileInput").files[0];
+        // Theme Toggle
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
 
-if(!file){
-alert("Please select file");
-return;
-}
+        themeToggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+        });
 
-let quality=document.getElementById("quality").value/100;
+        // Quality Slider
+        qualitySlider.addEventListener('input', (e) => {
+            qualityVal.textContent = `${e.target.value}%`;
+        });
 
-let reader=new FileReader();
+        // Drag & Drop Effects
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
 
-reader.onload=function(e){
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
 
-let img=new Image();
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => dropZone.classList.add('dragover'), false);
+        });
 
-img.src=e.target.result;
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, () => dropZone.classList.remove('dragover'), false);
+        });
 
-img.onload=function(){
+        // Handle Files
+        dropZone.addEventListener('drop', handleDrop, false);
+        fileInput.addEventListener('change', handleFiles, false);
 
-let canvas=document.createElement("canvas");
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            handleFiles({ target: { files: files } });
+        }
 
-let ctx=canvas.getContext("2d");
+        function handleFiles(e) {
+            const files = [...e.target.files];
+            if (files.length === 0) return;
 
-canvas.width=img.width;
+            // Filter only images
+            const imageFiles = files.filter(file => file.type.startsWith('image/'));
+            
+            if (imageFiles.length < files.length) {
+                alert('Some files were not images and were ignored.');
+            }
 
-canvas.height=img.height;
+            selectedFiles = imageFiles;
+            renderFileList();
+            settingsPanel.classList.remove('hidden');
+            resultsArea.classList.add('hidden');
+            compressedFiles = [];
+        }
 
-ctx.drawImage(img,0,0);
+        function renderFileList() {
+            fileList.innerHTML = '';
+            selectedFiles.forEach((file, index) => {
+                const div = document.createElement('div');
+                div.className = 'flex justify-between items-center bg-white dark:bg-gray-700 p-2 rounded shadow-sm text-sm';
+                div.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-image text-gray-400"></i>
+                        <span class="truncate max-w-[150px]">${file.name}</span>
+                    </div>
+                    <span class="text-gray-500">${formatBytes(file.size)}</span>
+                `;
+                fileList.appendChild(div);
+            });
+        }
 
-canvas.toBlob(function(blob){
-
-let newSize=(blob.size/1024).toFixed(2);
-
-let oldSize=(file.size/1024).toFixed(2);
-
-document.getElementById("result").innerHTML=
-
-"Old Size: "+oldSize+" KB <br> New Size: "+newSize+" KB";
-
-let link=document.createElement("a");
-
-link.href=URL.createObjectURL(blob);
-
-link.download="compressed-image.jpg";
-
-link.click();
-
-},"image/jpeg",quality);
-
-}
-
-}
-
-reader.readAsDataURL(file);
-
-}
-
-</script>
-
-</body>
-</html>
-
+        function
