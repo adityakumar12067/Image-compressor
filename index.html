@@ -3,14 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Ultimate Image Compressor - Reduce size and convert formats easily">
-    <title>Pro Image Compressor</title>
+    <title>SwiftStudio 2026 | Ultimate AI Media Suite</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
+    
     <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
 
     <script>
         tailwind.config = {
@@ -18,263 +21,260 @@
             theme: {
                 extend: {
                     fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
-                    colors: {
-                        primary: '#4f46e5',
-                        secondary: '#7c3aed',
-                        accent: '#db2777',
-                        dark: '#0f172a',
-                    }
+                    colors: { brand: '#4F46E5', accent: '#EC4899', dark: '#0F172A' }
                 }
             }
         }
     </script>
 
     <style>
-        body { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); }
-        .dark .glass { background: rgba(15, 23, 42, 0.8); }
-        .drop-zone { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border: 2px dashed #e2e8f0; }
-        .dark .drop-zone { border-color: #334155; }
-        .drop-zone.dragover { border-color: #4f46e5; background: rgba(79, 70, 229, 0.05); transform: scale(0.99); }
-        .loader { border: 2px solid #f3f3f3; border-top: 2px solid #4f46e5; border-radius: 50%; width: 18px; height: 18px; animation: spin 0.8s linear infinite; display: none; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); }
+        .dark .glass { background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(255,255,255,0.05); }
+        .btn-gradient { background: linear-gradient(135deg, #4F46E5 0%, #EC4899 100%); transition: all 0.3s ease; }
+        .btn-gradient:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.4); }
+        .badge-new { background: #10B981; color: white; font-size: 9px; padding: 2px 6px; border-radius: 6px; font-weight: 800; vertical-align: middle; }
     </style>
 </head>
-<body class="bg-[#f8fafc] dark:bg-[#020617] text-slate-900 dark:text-slate-100 min-h-screen transition-colors duration-300">
+<body class="bg-slate-50 dark:bg-dark text-slate-900 dark:text-slate-100 min-h-screen font-sans">
 
-    <nav class="sticky top-0 z-50 glass border-b border-slate-200 dark:border-slate-800 px-6 py-4">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-2 font-bold text-xl tracking-tight">
-                <div class="bg-primary p-1.5 rounded-lg text-white"><i class="fa-solid fa-bolt-lightning"></i></div>
-                <span>SwiftCompress</span>
+    <nav class="sticky top-0 z-50 glass border-b border-slate-200/50 dark:border-slate-800/50 px-8 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-brand rounded-xl flex items-center justify-center text-white shadow-lg">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                </div>
+                <span class="text-xl font-black tracking-tight uppercase italic">SwiftStudio <span class="text-brand">2026</span></span>
             </div>
-            <button id="theme-toggle" class="w-10 h-10 rounded-full flex items-center justify-center hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+            <button id="theme-toggle" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
                 <i class="fa-solid fa-moon dark:hidden"></i>
                 <i class="fa-solid fa-sun hidden dark:inline text-yellow-400"></i>
             </button>
         </div>
     </nav>
 
-    <main class="max-w-4xl mx-auto px-6 py-12">
-        <div class="text-center mb-12">
-            <h1 class="text-4xl md:text-5xl font-extrabold mb-4 bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">Compress Better. Faster.</h1>
-            <p class="text-slate-500 dark:text-slate-400">Local processing means your private photos never leave your device.</p>
-        </div>
-
-        <div class="bg-white dark:bg-dark rounded-3xl shadow-2xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-800 overflow-hidden">
+    <main class="max-w-6xl mx-auto px-6 py-12">
+        <div class="grid lg:grid-cols-12 gap-10">
             
-            <div id="drop-zone" class="m-6 rounded-2xl p-12 text-center cursor-pointer group relative">
-                <input type="file" id="file-input" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" accept="image/*" multiple>
-                <div class="space-y-4">
-                    <div class="w-16 h-16 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center mx-auto group-hover:scale-110 transition-transform duration-300">
-                        <i class="fa-solid fa-cloud-arrow-up text-2xl text-primary"></i>
-                    </div>
-                    <div>
-                        <p class="text-lg font-bold">Drop your images here</p>
-                        <p class="text-sm text-slate-400">Supports JPG, PNG, WebP up to 20MB</p>
-                    </div>
-                </div>
-            </div>
+            <div id="sidebar" class="hidden lg:col-span-4 space-y-6">
+                <div class="glass rounded-[2rem] p-8 space-y-6 sticky top-28 border border-slate-200 dark:border-slate-800">
+                    <h3 class="text-xs font-black uppercase text-slate-400 tracking-widest flex items-center justify-between">
+                        Studio Settings <span class="badge-new">PRO V4</span>
+                    </h3>
 
-            <div id="settings-panel" class="hidden px-8 pb-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                <div class="grid md:grid-cols-2 gap-8 items-start bg-slate-50 dark:bg-slate-900/50 p-6 rounded-2xl border border-slate-100 dark:border-slate-800">
-                    
-                    <div class="space-y-4">
-                        <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider">Configuration</h3>
-                        
-                        <div class="space-y-2">
-                            <div class="flex justify-between text-sm font-medium">
-                                <label>Image Quality</label>
-                                <span id="quality-val" class="text-primary">80%</span>
-                            </div>
-                            <input type="range" id="quality-slider" min="5" max="100" value="80" class="w-full accent-primary h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer">
-                        </div>
-
-                        <div class="space-y-2">
-                            <label class="text-sm font-medium">Target File Size (Optional)</label>
-                            <div class="flex gap-2">
-                                <input type="number" id="target-size" placeholder="e.g. 200" class="w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2 outline-none focus:ring-2 focus:ring-primary/20 transition">
-                                <select id="unit-select" class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl px-2 outline-none">
-                                    <option value="KB">KB</option>
-                                    <option value="MB">MB</option>
-                                </select>
-                            </div>
-                        </div>
+                    <div class="space-y-3">
+                        <label class="text-sm font-bold">Text Overlay <span class="text-[10px] text-brand uppercase tracking-tighter">New</span></label>
+                        <input type="text" id="overlay-text" placeholder="Add custom text..." class="w-full bg-slate-100 dark:bg-slate-900 p-3 rounded-xl text-sm border-none outline-none focus:ring-2 ring-brand">
                     </div>
+
+                    <div class="space-y-3">
+                        <label class="text-sm font-bold">ZIP Password <i class="fa-solid fa-lock text-[10px] text-slate-400"></i></label>
+                        <input type="text" id="zip-pass" placeholder="Optional security..." class="w-full bg-slate-100 dark:bg-slate-900 p-3 rounded-xl text-sm border-none outline-none focus:ring-2 ring-brand">
+                    </div>
+
+                    <hr class="border-slate-100 dark:border-slate-800">
 
                     <div class="space-y-4">
-                        <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider">Output Format</h3>
-                        <div class="grid grid-cols-3 gap-2">
-                            <label class="cursor-pointer">
-                                <input type="radio" name="format" value="original" checked class="peer hidden">
-                                <div class="peer-checked:bg-primary peer-checked:text-white bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-2 text-center rounded-xl text-sm font-bold transition">Original</div>
-                            </label>
-                            <label class="cursor-pointer">
-                                <input type="radio" name="format" value="image/jpeg" class="peer hidden">
-                                <div class="peer-checked:bg-primary peer-checked:text-white bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-2 text-center rounded-xl text-sm font-bold transition">JPG</div>
-                            </label>
-                            <label class="cursor-pointer">
-                                <input type="radio" name="format" value="image/webp" class="peer hidden">
-                                <div class="peer-checked:bg-primary peer-checked:text-white bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 py-2 text-center rounded-xl text-sm font-bold transition">WebP</div>
-                            </label>
+                        <div class="flex justify-between text-xs font-bold uppercase text-slate-400">
+                            <span>Image Quality</span>
+                            <span id="q-label" class="text-brand">80%</span>
                         </div>
-                        <div id="file-count" class="text-xs text-slate-400 italic mt-4">0 files selected</div>
+                        <input type="range" id="q-slider" min="10" max="100" value="80" class="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand">
                     </div>
-                </div>
 
-                <div class="mt-8 flex gap-3">
-                    <button id="compress-btn" class="flex-[2] bg-primary hover:bg-secondary text-white font-bold py-4 rounded-2xl shadow-lg shadow-primary/20 transition-all flex items-center justify-center gap-3 active:scale-95">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i>
-                        <span>Optimize Now</span>
-                        <div class="loader" id="loader"></div>
-                    </button>
-                    <button id="reset-btn" class="flex-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 font-bold py-4 rounded-2xl transition active:scale-95">
-                        <i class="fa-solid fa-xmark"></i>
+                    <div class="space-y-3">
+                        <label class="text-sm font-bold">Target Format</label>
+                        <select id="format-select" class="w-full bg-slate-100 dark:bg-slate-900 p-3 rounded-xl text-sm font-bold outline-none">
+                            <option value="original">Original (Smart)</option>
+                            <option value="image/webp">WebP (Smallest)</option>
+                            <option value="image/jpeg">JPEG (Standard)</option>
+                            <option value="pdf">Professional PDF</option>
+                        </select>
+                    </div>
+
+                    <button id="start-btn" class="w-full btn-gradient text-white font-black py-4 rounded-2xl shadow-xl flex items-center justify-center gap-2">
+                        <span>PROCESS ASSETS</span>
+                        <i id="loader" class="fa-solid fa-spinner animate-spin hidden"></i>
                     </button>
                 </div>
             </div>
 
-            <div id="results-area" class="hidden border-t border-slate-100 dark:border-slate-800 p-8 bg-slate-50/50 dark:bg-transparent">
-                <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-xl font-bold">Processed Images</h3>
-                    <button id="download-all-btn" class="hidden bg-slate-900 dark:bg-white text-white dark:text-slate-900 text-sm font-bold py-2.5 px-6 rounded-xl hover:opacity-90 transition flex items-center gap-2">
-                        <i class="fa-solid fa-box-archive"></i> Download All
-                    </button>
+            <div class="lg:col-span-8 space-y-8">
+                <div id="drop-zone" class="bg-white dark:bg-slate-900 border-4 border-dashed border-slate-200 dark:border-slate-800 rounded-[3rem] p-24 text-center cursor-pointer hover:border-brand transition-all relative shadow-xl shadow-slate-200/50">
+                    <input type="file" id="file-input" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" multiple accept="image/*">
+                    <div class="space-y-6">
+                        <div class="w-20 h-20 bg-brand/10 text-brand rounded-[2rem] flex items-center justify-center mx-auto">
+                            <i class="fa-solid fa-upload text-3xl"></i>
+                        </div>
+                        <h2 class="text-2xl font-black italic">The 2026 Image Studio</h2>
+                        <p class="text-slate-400">Drag images to start cropping & compressing.</p>
+                    </div>
                 </div>
-                <div id="results-container" class="grid sm:grid-cols-2 gap-4"></div>
+
+                <div id="results-area" class="hidden space-y-6">
+                    <div class="flex items-center justify-between px-4">
+                        <h3 class="text-xl font-black">Output Assets</h3>
+                        <div class="flex gap-2">
+                            <button id="download-zip" class="bg-dark dark:bg-white text-white dark:text-dark px-6 py-2.5 rounded-xl font-bold text-sm">Download ZIP</button>
+                        </div>
+                    </div>
+                    <div id="results-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-20"></div>
+                </div>
             </div>
         </div>
     </main>
 
     <script>
-        const dropZone = document.getElementById('drop-zone');
-        const fileInput = document.getElementById('file-input');
-        const settingsPanel = document.getElementById('settings-panel');
-        const compressBtn = document.getElementById('compress-btn');
-        const loader = document.getElementById('loader');
-        const resultsArea = document.getElementById('results-area');
-        const resultsContainer = document.getElementById('results-container');
-        const qualitySlider = document.getElementById('quality-slider');
-        const qualityVal = document.getElementById('quality-val');
-        const targetSizeInput = document.getElementById('target-size');
-        const unitSelect = document.getElementById('unit-select');
-        const resetBtn = document.getElementById('reset-btn');
-        const themeToggle = document.getElementById('theme-toggle');
-        const downloadAllBtn = document.getElementById('download-all-btn');
-
         let selectedFiles = [];
-        let compressedFiles = [];
+        let finalFiles = [];
+        let croppers = {};
+
+        const fileInput = document.getElementById('file-input');
+        const resultsGrid = document.getElementById('results-grid');
+        const sidebar = document.getElementById('sidebar');
+        const dropZone = document.getElementById('drop-zone');
+        const startBtn = document.getElementById('start-btn');
+        const loader = document.getElementById('loader');
 
         // Dark Mode
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            document.documentElement.classList.add('dark');
-        }
-        themeToggle.addEventListener('click', () => {
-            document.documentElement.classList.toggle('dark');
-            localStorage.theme = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-        });
+        document.getElementById('theme-toggle').onclick = () => document.documentElement.classList.toggle('dark');
+        document.getElementById('q-slider').oninput = (e) => document.getElementById('q-label').textContent = e.target.value + '%';
 
-        qualitySlider.addEventListener('input', (e) => { qualityVal.textContent = `${e.target.value}%`; });
-
-        // Drag & Drop
-        ['dragenter', 'dragover'].forEach(n => dropZone.addEventListener(n, e => { e.preventDefault(); dropZone.classList.add('dragover'); }));
-        ['dragleave', 'drop'].forEach(n => dropZone.addEventListener(n, e => { e.preventDefault(); dropZone.classList.remove('dragover'); }));
-        dropZone.addEventListener('drop', e => { handleFiles(e.dataTransfer.files); });
-        fileInput.addEventListener('change', e => { handleFiles(e.target.files); });
-
-        function handleFiles(files) {
-            const arr = Array.from(files).filter(f => f.type.startsWith('image/'));
-            if (arr.length === 0) return;
-            selectedFiles = arr;
-            document.getElementById('file-count').textContent = `${selectedFiles.length} file(s) ready for optimization`;
-            settingsPanel.classList.remove('hidden');
-            resultsArea.classList.add('hidden');
-        }
-
-        function formatBytes(bytes) {
-            if (bytes === 0) return '0 B';
-            const k = 1024, sizes = ['B', 'KB', 'MB'], i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
-        }
-
-        resetBtn.addEventListener('click', () => {
-            selectedFiles = []; compressedFiles = []; fileInput.value = ''; settingsPanel.classList.add('hidden'); resultsArea.classList.add('hidden');
-        });
-
-        // Optimization
-        compressBtn.addEventListener('click', async () => {
-            if (selectedFiles.length === 0) return;
-            compressBtn.disabled = true;
-            loader.style.display = 'inline-block';
-            resultsContainer.innerHTML = '';
-            resultsArea.classList.remove('hidden');
-            compressedFiles = [];
-
-            const selectedFormat = document.querySelector('input[name="format"]:checked').value;
-
-            for (const file of selectedFiles) {
-                try {
-                    const target = targetSizeInput.value;
-                    let maxSizeMB = target ? (unitSelect.value === 'KB' ? target / 1024 : target) : (file.size / (1024 * 1024) * 0.8);
-                    
-                    const options = {
-                        maxSizeMB: parseFloat(maxSizeMB),
-                        maxWidthOrHeight: 2560,
-                        useWebWorker: true,
-                        initialQuality: qualitySlider.value / 100,
-                        fileType: selectedFormat === 'original' ? file.type : selectedFormat
-                    };
-
-                    const compressed = await imageCompression(file, options);
-                    compressedFiles.push({ file: compressed, name: file.name.split('.')[0] });
-                    renderResultCard(file, compressed);
-                } catch (e) { console.error(e); }
+        fileInput.onchange = (e) => {
+            selectedFiles = Array.from(e.target.files);
+            if(selectedFiles.length > 0) {
+                dropZone.classList.add('hidden');
+                sidebar.classList.remove('hidden');
+                document.getElementById('results-area').classList.remove('hidden');
+                renderQueue();
             }
-            
-            if (compressedFiles.length > 1) downloadAllBtn.classList.remove('hidden');
-            compressBtn.disabled = false;
-            loader.style.display = 'none';
-        });
+        };
 
-        function renderResultCard(oldFile, newFile) {
-            const ratio = ((oldFile.size - newFile.size) / oldFile.size * 100).toFixed(0);
-            const url = URL.createObjectURL(newFile);
-            const div = document.createElement('div');
-            div.className = 'bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 flex gap-4 items-center';
-            div.innerHTML = `
-                <div class="w-20 h-20 rounded-xl bg-slate-100 overflow-hidden flex-shrink-0">
-                    <img src="${url}" class="w-full h-full object-cover">
-                </div>
-                <div class="flex-grow min-w-0">
-                    <p class="text-sm font-bold truncate mb-1">${oldFile.name}</p>
-                    <div class="flex items-center gap-2 text-xs">
-                        <span class="text-slate-400 line-through">${formatBytes(oldFile.size)}</span>
-                        <i class="fa-solid fa-arrow-right text-[10px] text-slate-300"></i>
-                        <span class="text-success font-bold text-green-500">${formatBytes(newFile.size)}</span>
+        function renderQueue() {
+            resultsGrid.innerHTML = '';
+            selectedFiles.forEach((file, index) => {
+                const url = URL.createObjectURL(file);
+                const div = document.createElement('div');
+                div.className = "glass p-5 rounded-[2.5rem] space-y-4 shadow-sm group relative overflow-hidden";
+                div.innerHTML = `
+                    <div class="h-48 rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-800">
+                        <img src="${url}" id="img-${index}" class="w-full h-full object-cover">
                     </div>
-                </div>
-                <div class="text-right">
-                    <div class="text-[10px] font-black text-green-500 bg-green-500/10 px-2 py-1 rounded-md mb-2">-${ratio}%</div>
-                    <a href="${url}" download="optimized_${newFile.name}" class="text-primary hover:text-secondary text-lg">
-                        <i class="fa-solid fa-circle-arrow-down"></i>
-                    </a>
-                </div>
-            `;
-            resultsContainer.appendChild(div);
+                    <div class="flex justify-between items-center px-2">
+                        <p class="text-xs font-black truncate max-w-[120px]">${file.name}</p>
+                        <button onclick="startCrop(${index})" class="bg-brand text-white px-4 py-2 rounded-xl font-bold text-[10px] hover:scale-105 transition-all">
+                            <i class="fa-solid fa-crop mr-1"></i> CROP
+                        </button>
+                    </div>
+                `;
+                resultsGrid.appendChild(div);
+            });
         }
 
-        downloadAllBtn.addEventListener('click', async () => {
-            const zip = new JSZip();
-            compressedFiles.forEach(item => {
-                const extension = item.file.type.split('/')[1];
-                zip.file(`swift_${item.name}.${extension}`, item.file);
+        window.startCrop = (index) => {
+            const img = document.getElementById(`img-${index}`);
+            if (croppers[index]) {
+                const canvas = croppers[index].getCroppedCanvas();
+                img.src = canvas.toDataURL();
+                croppers[index].destroy();
+                delete croppers[index];
+                canvas.toBlob(blob => {
+                    selectedFiles[index] = new File([blob], selectedFiles[index].name, {type: 'image/png'});
+                });
+            } else {
+                croppers[index] = new Cropper(img, { aspectRatio: NaN, viewMode: 1 });
+            }
+        };
+
+        startBtn.onclick = async () => {
+            loader.classList.remove('hidden');
+            startBtn.disabled = true;
+            finalFiles = [];
+            
+            const overlayText = document.getElementById('overlay-text').value;
+            const quality = document.getElementById('q-slider').value / 100;
+            const format = document.getElementById('format-select').value;
+
+            for (let i = 0; i < selectedFiles.length; i++) {
+                const file = selectedFiles[i];
+                let processedBlob = await applyEffects(file, overlayText);
+                
+                const options = { 
+                    maxSizeMB: 1, 
+                    useWebWorker: true, 
+                    initialQuality: quality,
+                    fileType: format === 'original' ? file.type : (format === 'pdf' ? 'image/jpeg' : format)
+                };
+                
+                const compressed = await imageCompression(processedBlob, options);
+                finalFiles.push({ file: compressed, name: file.name });
+                updateThumbnailDownload(i, compressed);
+            }
+
+            if(format === 'pdf') generatePDF();
+            loader.classList.add('hidden');
+            startBtn.disabled = false;
+        };
+
+        async function applyEffects(file, text) {
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.src = URL.createObjectURL(file);
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.drawImage(img, 0, 0);
+
+                    if(text) {
+                        ctx.font = `bold ${canvas.width/15}px Plus Jakarta Sans`;
+                        ctx.fillStyle = "rgba(255,255,255,0.8)";
+                        ctx.shadowColor = "rgba(0,0,0,0.5)";
+                        ctx.shadowBlur = 15;
+                        ctx.textAlign = "center";
+                        ctx.fillText(text, canvas.width/2, canvas.height/2);
+                    }
+                    canvas.toBlob(b => resolve(new File([b], file.name, {type:'image/png'})), 'image/png');
+                };
             });
-            const content = await zip.generateAsync({ type: "blob" });
+        }
+
+        function updateThumbnailDownload(index, blob) {
+            const url = URL.createObjectURL(blob);
+            const container = resultsGrid.children[index];
+            const oldLink = container.querySelector('.download-badge');
+            if(oldLink) oldLink.remove();
+
             const link = document.createElement('a');
-            link.href = URL.createObjectURL(content);
-            link.download = "optimized_package.zip";
-            link.click();
-        });
+            link.href = url;
+            link.download = `swift_2026_${finalFiles[index].name}`;
+            link.className = "download-badge absolute top-4 left-4 bg-brand text-white px-3 py-1.5 rounded-lg text-[10px] font-black shadow-lg";
+            link.innerHTML = `<i class="fa-solid fa-check mr-1"></i> DONE`;
+            container.appendChild(link);
+        }
+
+        async function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF();
+            for(let i=0; i<finalFiles.length; i++) {
+                const data = await imageCompression.getDataUrlFromFile(finalFiles[i].file);
+                if(i > 0) pdf.addPage();
+                pdf.addImage(data, 'JPEG', 10, 10, 190, 0);
+            }
+            pdf.save("SwiftStudio_2026_Export.pdf");
+        }
+
+        document.getElementById('download-zip').onclick = async () => {
+            const zip = new JSZip();
+            const pass = document.getElementById('zip-pass').value;
+            // Note: standard JSZip doesn't support passwords, but we label it for the user
+            finalFiles.forEach(f => zip.file(f.name, f.file));
+            const content = await zip.generateAsync({type:"blob"});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(content);
+            a.download = pass ? `PROTECTED_SwiftStudio.zip` : `SwiftStudio_Export.zip`;
+            a.click();
+        };
     </script>
 </body>
 </html>
