@@ -3,137 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Best Image Compressor - Professional Photo Toolkit</title>
     
-    <meta name="description" content="Free professional tool to compress, convert, and edit images online.">
-    <meta name="theme-color" content="#ef4444">
-    
+    <title>Free Image Compressor Online | Compress JPG PNG WEBP to 20KB, 50KB</title>
+    <meta name="description" content="Best Image Compressor: Free online tool to compress image to 50kb, convert JPG to PNG, Image to PDF, and resize photos. Fast, secure and private.">
+    <meta name="keywords" content="compress image to 50kb, compress image to 20kb, image resizer, jpg to pdf, png to jpg, best image compressor, online image editor">
+    <meta name="author" content="Aditya Kumar">
+    <link rel="canonical" href="https://adityakumar12067.github.io/Image-compressor/" />
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/browser-image-compression/2.0.2/browser-image-compression.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-        .tool-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .tool-card:hover { transform: translateY(-10px); border-color: #ef4444; box-shadow: 0 20px 40px -10px rgba(239, 68, 68, 0.2); }
-        #previewCanvas { max-width: 100%; max-height: 70vh; border-radius: 12px; cursor: move; background: #e2e8f0; }
-        .slider { width: 100%; accent-color: #ef4444; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
+        :root { --primary: #ef4444; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; transition: 0.3s; }
+        .dark { background-color: #0f172a; color: white; }
+        .glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.1); }
+        .tool-card { transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .tool-card:hover { transform: translateY(-12px) scale(1.02); }
+        .hero-gradient { background: radial-gradient(circle at top right, rgba(239, 68, 68, 0.1), transparent); }
+        .ad-placeholder { background: #f8fafc; border: 2px dashed #e2e8f0; text-align: center; padding: 20px; color: #94a3b8; font-size: 12px; border-radius: 12px; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900">
+<body class="bg-slate-50 text-slate-900 overflow-x-hidden">
 
-    <nav class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b">
+    <nav class="sticky top-0 z-50 border-b bg-white/80 dark:bg-slate-900/80 backdrop-blur-md">
         <div class="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
             <div class="flex items-center gap-2">
-                <div class="bg-red-600 p-2 rounded-lg text-white shadow-lg"><i class="fas fa-bolt text-lg"></i></div>
-                <span class="text-xl font-black tracking-tighter uppercase italic">Best Image <span class="text-red-600">Compressor</span></span>
+                <div class="bg-red-600 p-2 rounded-xl text-white animate-pulse"><i class="fas fa-bolt"></i></div>
+                <span class="text-xl font-extrabold tracking-tighter">IMAGE<span class="text-red-600">PRO</span></span>
             </div>
-            <div class="hidden md:flex gap-6 font-bold text-xs uppercase text-slate-500 tracking-widest">
-                <a href="#" class="hover:text-red-600">Home</a>
-                <a href="#tools" class="hover:text-red-600">Tools</a>
+            <div class="hidden lg:flex gap-8 font-bold text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400">
+                <a href="#tools" class="hover:text-red-600">All Tools</a>
                 <a href="#about" class="hover:text-red-600">Privacy</a>
+                <a href="#contact" class="hover:text-red-600">Contact</a>
             </div>
-            <button class="bg-slate-900 text-white px-6 py-2 rounded-full font-bold text-sm hover:scale-105 transition">v4.0 Pro</button>
+            <div class="flex gap-4 items-center">
+                <button onclick="toggleDarkMode()" class="p-2 rounded-full bg-slate-100 dark:bg-slate-800"><i class="fas fa-moon"></i></button>
+                <button class="bg-red-600 text-white px-5 py-2 rounded-full font-bold text-sm shadow-lg shadow-red-200">PRO Beta</button>
+            </div>
         </div>
     </nav>
 
-    <header class="py-20 px-6 text-center bg-white border-b">
-        <h1 class="text-5xl md:text-7xl font-black mb-6 tracking-tight leading-tight">Fast. Private. <span class="text-red-600 italic">Professional.</span></h1>
-        <p class="text-lg text-slate-500 max-w-2xl mx-auto">Upload images and edit them instantly. No server uploads. No data leaks. 100% Secure.</p>
+    <div class="max-w-4xl mx-auto mt-4 ad-placeholder">ADVERTISEMENT - PLACE GOOGLE ADSENSE CODE HERE</div>
+
+    <header class="py-20 px-6 text-center hero-gradient">
+        <h1 class="text-5xl md:text-7xl font-black mb-6 tracking-tight leading-tight">Professional <span class="text-red-600">Image Toolkit.</span></h1>
+        <p class="text-xl text-slate-500 dark:text-slate-400 max-w-2xl mx-auto font-medium">Fast, Offline & Secure. Compress to 50KB, Convert formats, and Manage PDFs in one click.</p>
     </header>
 
-    <main id="tools" class="max-w-7xl mx-auto px-6 py-20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+    <main id="tools" class="max-w-7xl mx-auto px-6 py-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
         
-        <div onclick="openTool('compress')" class="tool-card bg-white p-10 rounded-[2.5rem] cursor-pointer border-2 border-transparent shadow-sm">
-            <div class="w-16 h-16 bg-orange-100 text-orange-600 rounded-3xl flex items-center justify-center mb-8 shadow-inner"><i class="fas fa-compress-alt text-3xl"></i></div>
-            <h3 class="text-2xl font-black mb-2">Compress</h3>
-            <p class="text-slate-500 text-sm">Reduce size up to 90% without losing quality.</p>
+        <div onclick="openTool('compress')" class="tool-card bg-white dark:bg-slate-800 p-8 rounded-[2.5rem] cursor-pointer shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-700">
+            <div class="w-14 h-14 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center mb-6"><i class="fas fa-compress-alt text-2xl"></i></div>
+            <h3 class="text-xl font-black mb-2 uppercase">Compress Image</h3>
+            <p class="text-slate-500 text-sm">Perfectly compress to 20KB, 50KB or 100KB.</p>
         </div>
 
-        <div onclick="openTool('convert')" class="tool-card bg-white p-10 rounded-[2.5rem] cursor-pointer border-2 border-transparent shadow-sm">
-            <div class="w-16 h-16 bg-indigo-100 text-indigo-600 rounded-3xl flex items-center justify-center mb-8 shadow-inner"><i class="fas fa-sync-alt text-3xl"></i></div>
-            <h3 class="text-2xl font-black mb-2">Convert</h3>
-            <p class="text-slate-500 text-sm">Change format to JPG, PNG, or Next-Gen WebP.</p>
+        <div onclick="openTool('convert')" class="tool-card bg-white dark:bg-slate-800 p-8 rounded-[2.5rem] cursor-pointer shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-700">
+            <div class="w-14 h-14 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-6"><i class="fas fa-sync text-2xl"></i></div>
+            <h3 class="text-xl font-black mb-2 uppercase">Image Converter</h3>
+            <p class="text-slate-500 text-sm">Convert JPG to PNG, WebP or vice versa instantly.</p>
         </div>
 
-        <div onclick="openTool('text')" class="tool-card bg-white p-10 rounded-[2.5rem] cursor-pointer border-2 border-transparent shadow-sm">
-            <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-3xl flex items-center justify-center mb-8 shadow-inner"><i class="fas fa-font text-3xl"></i></div>
-            <h3 class="text-2xl font-black mb-2">Add Text</h3>
-            <p class="text-slate-500 text-sm">Add custom watermarks or names easily.</p>
+        <div onclick="openTool('jpg2pdf')" class="tool-card bg-white dark:bg-slate-800 p-8 rounded-[2.5rem] cursor-pointer shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-700">
+            <div class="w-14 h-14 bg-red-100 text-red-600 rounded-2xl flex items-center justify-center mb-6"><i class="fas fa-file-pdf text-2xl"></i></div>
+            <h3 class="text-xl font-black mb-2 uppercase">Image to PDF</h3>
+            <p class="text-slate-500 text-sm">Turn your photos into professional PDF documents.</p>
         </div>
 
-        <div onclick="openTool('jpg2pdf')" class="tool-card bg-white p-10 rounded-[2.5rem] cursor-pointer border-2 border-transparent shadow-sm">
-            <div class="w-16 h-16 bg-red-100 text-red-600 rounded-3xl flex items-center justify-center mb-8 shadow-inner"><i class="fas fa-file-pdf text-3xl"></i></div>
-            <h3 class="text-2xl font-black mb-2">To PDF</h3>
-            <p class="text-slate-500 text-sm">Convert multiple images into one PDF document.</p>
+        <div onclick="openTool('text')" class="tool-card bg-white dark:bg-slate-800 p-8 rounded-[2.5rem] cursor-pointer shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-slate-700">
+            <div class="w-14 h-14 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center mb-6"><i class="fas fa-font text-2xl"></i></div>
+            <h3 class="text-xl font-black mb-2 uppercase">Add Watermark</h3>
+            <p class="text-slate-500 text-sm">Add branding text or name on your photos.</p>
         </div>
 
     </main>
 
+    <div class="max-w-4xl mx-auto ad-placeholder mb-20">TOOL AD - PLACE GOOGLE ADSENSE CODE HERE</div>
+
+    <section class="bg-white dark:bg-slate-900 py-20 border-t border-slate-100 dark:border-slate-800">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-20">
+            <div id="about">
+                <h2 class="text-3xl font-black mb-6">About ImagePro</h2>
+                <p class="text-slate-500 dark:text-slate-400 leading-relaxed mb-4">ImagePro is a one-stop solution for all your image processing needs. Built with privacy in mind, our tool ensures that none of your data ever reaches any server.</p>
+                <ul class="space-y-2 text-sm font-bold uppercase text-red-600">
+                    <li><i class="fas fa-check mr-2"></i> 100% Free Forever</li>
+                    <li><i class="fas fa-check mr-2"></i> Offline Processing</li>
+                    <li><i class="fas fa-check mr-2"></i> No Registration</li>
+                </ul>
+            </div>
+            <div id="contact">
+                <h2 class="text-3xl font-black mb-6">Contact & Terms</h2>
+                <p class="text-slate-500 dark:text-slate-400 text-sm mb-6">By using our tool, you agree to our Terms of Service. For support or removal requests, please reach out via GitHub or Email.</p>
+                <div class="flex gap-4">
+                    <a href="#" class="px-6 py-2 bg-slate-100 dark:bg-slate-800 rounded-lg text-xs font-bold uppercase">Privacy Policy</a>
+                    <a href="#" class="px-6 py-2 bg-slate-100 dark:bg-slate-800 rounded-lg text-xs font-bold uppercase">Terms & Conditions</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-slate-950 text-slate-500 py-12 px-6 text-center">
+        <div class="flex justify-center gap-6 mb-8 text-xl">
+            <a href="https://github.com/adityakumar12067" class="hover:text-red-600"><i class="fab fa-github"></i></a>
+            <a href="#" class="hover:text-red-600"><i class="fab fa-twitter"></i></a>
+        </div>
+        <p class="text-xs font-black uppercase tracking-[0.4em]">© 2026 IMAGEPRO TOOLS | Developed by Aditya Kumar</p>
+    </footer>
+
     <div id="editorModal" class="fixed inset-0 bg-slate-900/95 hidden z-[100] flex items-center justify-center p-4">
-        <div class="bg-white w-full max-w-6xl rounded-[3rem] overflow-hidden flex flex-col md:flex-row h-[90vh]">
-            <div class="flex-1 bg-slate-200 p-8 flex items-center justify-center overflow-auto relative">
+        <div class="bg-white dark:bg-slate-800 w-full max-w-5xl rounded-[3rem] overflow-hidden flex flex-col md:flex-row h-[85vh]">
+            <div class="flex-1 bg-slate-100 dark:bg-slate-700 p-8 flex items-center justify-center overflow-auto">
                 <canvas id="previewCanvas"></canvas>
             </div>
-            
-            <div class="w-full md:w-96 p-10 bg-white border-l overflow-y-auto">
-                <h2 class="text-3xl font-black mb-8 italic" id="toolTitle uppercase">Editor</h2>
-
-                <div id="textControls" class="space-y-6 hidden">
-                    <input type="text" id="textInput" placeholder="Type something..." class="w-full p-4 bg-slate-50 rounded-2xl font-bold border-2 border-transparent focus:border-red-500 outline-none" oninput="drawAll()">
-                    <div class="flex items-center gap-4">
-                        <input type="color" id="textColor" value="#ef4444" class="w-12 h-12 rounded-lg" oninput="drawAll()">
-                        <input type="number" id="textSize" value="60" class="w-20 p-3 bg-slate-50 rounded-xl font-bold" oninput="drawAll()">
-                    </div>
-                    <p class="text-xs text-slate-400">Drag the text on image to reposition.</p>
+            <div class="w-full md:w-80 p-10 flex flex-col gap-6">
+                <h2 class="text-2xl font-black italic text-red-600" id="toolTitle">EDITOR</h2>
+                <div id="textControls" class="hidden space-y-4">
+                    <input type="text" id="textInput" placeholder="Enter text..." class="w-full p-3 bg-slate-100 dark:bg-slate-700 rounded-xl outline-none" oninput="drawAll()">
                 </div>
-
-                <div id="convertControls" class="space-y-4 hidden">
-                    <label class="text-xs font-black text-slate-400 uppercase">Select Output Format</label>
-                    <select id="targetFormat" class="w-full p-4 bg-slate-100 rounded-2xl font-bold">
-                        <option value="image/jpeg">JPG (Best for photos)</option>
-                        <option value="image/png">PNG (No quality loss)</option>
-                        <option value="image/webp">WebP (Optimized for Web)</option>
+                <div id="convertControls" class="hidden space-y-4">
+                    <select id="targetFormat" class="w-full p-3 bg-slate-100 dark:bg-slate-700 rounded-xl font-bold">
+                        <option value="image/jpeg">JPG</option>
+                        <option value="image/png">PNG</option>
+                        <option value="image/webp">WebP</option>
                     </select>
                 </div>
-
-                <div class="mt-auto pt-10 space-y-3">
-                    <button onclick="downloadFinal()" class="w-full py-4 bg-red-600 text-white rounded-2xl font-black text-lg shadow-xl hover:bg-red-700 transition">Save & Download</button>
-                    <button onclick="closeModal()" class="w-full py-3 bg-slate-100 text-slate-500 rounded-2xl font-bold">Cancel</button>
+                <div class="mt-auto space-y-3">
+                    <button onclick="downloadFinal()" class="w-full py-4 bg-red-600 text-white rounded-2xl font-black shadow-xl shadow-red-200">Download</button>
+                    <button onclick="closeModal()" class="w-full py-3 bg-slate-100 dark:bg-slate-700 rounded-2xl font-bold">Close</button>
                 </div>
             </div>
         </div>
     </div>
-
-    <footer id="about" class="bg-slate-900 text-slate-400 py-20 px-6">
-        <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-16 text-center md:text-left">
-            <div>
-                <h4 class="text-white font-black uppercase mb-6 tracking-widest">Security First</h4>
-                <p class="text-sm leading-relaxed italic">"Your images are processed locally in your browser. We never see, store, or share your data. Pure Privacy."</p>
-            </div>
-            <div>
-                <h4 class="text-white font-black uppercase mb-6 tracking-widest">Quick Navigation</h4>
-                <ul class="space-y-3 text-sm font-bold uppercase">
-                    <li><a href="#" class="hover:text-red-500 transition">Image Compressor</a></li>
-                    <li><a href="#" class="hover:text-red-500 transition">Format Converter</a></li>
-                    <li><a href="#" class="hover:text-red-500 transition">PDF Tools</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="text-white font-black uppercase mb-6 tracking-widest">Connect</h4>
-                <div class="flex justify-center md:justify-start gap-6 text-2xl">
-                    <a href="https://github.com/adityakumar12067" class="hover:text-white"><i class="fab fa-github"></i></a>
-                    <a href="#" class="hover:text-white"><i class="fab fa-twitter"></i></a>
-                    <a href="#" class="hover:text-white"><i class="fab fa-instagram"></i></a>
-                </div>
-            </div>
-        </div>
-        <div class="max-w-7xl mx-auto border-t border-slate-800 mt-20 pt-10 text-center text-xs font-black uppercase tracking-[0.3em]">
-            © 2026 BEST IMAGE COMPRESSOR | Built by Aditya Kumar
-        </div>
-    </footer>
 
     <input type="file" id="fileInput" class="hidden" accept="image/*">
 
@@ -142,7 +146,10 @@
         const ctx = canvas.getContext('2d');
         let currentImg = new Image();
         let activeTool = '';
-        let textX = 100, textY = 100, isDragging = false;
+
+        function toggleDarkMode() {
+            document.body.classList.toggle('dark');
+        }
 
         function openTool(type) {
             activeTool = type;
@@ -157,7 +164,6 @@
                 currentImg.onload = () => {
                     canvas.width = currentImg.width;
                     canvas.height = currentImg.height;
-                    textX = canvas.width / 2; textY = canvas.height / 2;
                     drawAll();
                     showModal();
                 };
@@ -170,59 +176,40 @@
             document.getElementById('editorModal').classList.remove('hidden');
             document.getElementById('textControls').classList.toggle('hidden', activeTool !== 'text');
             document.getElementById('convertControls').classList.toggle('hidden', activeTool !== 'convert');
-            document.getElementById('toolTitle').innerText = activeTool;
         }
 
         function drawAll() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.drawImage(currentImg, 0, 0);
             if(activeTool === 'text') {
-                const fontSize = document.getElementById('textSize').value;
-                ctx.font = `black ${fontSize}px Inter, sans-serif`;
-                ctx.fillStyle = document.getElementById('textColor').value;
-                ctx.textAlign = "center";
-                ctx.fillText(document.getElementById('textInput').value, textX, textY);
+                ctx.font = "bold 60px Arial";
+                ctx.fillStyle = "red";
+                ctx.fillText(document.getElementById('textInput').value, 50, 100);
             }
         }
 
-        canvas.onmousedown = () => isDragging = true;
-        canvas.onmousemove = (e) => {
-            if(isDragging && activeTool === 'text') {
-                const rect = canvas.getBoundingClientRect();
-                const scaleX = canvas.width / rect.width;
-                const scaleY = canvas.height / rect.height;
-                textX = (e.clientX - rect.left) * scaleX;
-                textY = (e.clientY - rect.top) * scaleY;
-                drawAll();
-            }
-        };
-        canvas.onmouseup = () => isDragging = false;
-
         async function downloadFinal() {
             if(activeTool === 'compress') {
-                const options = { maxSizeMB: 0.1, maxWidthOrHeight: 1280 };
+                const options = { maxSizeMB: 0.05, maxWidthOrHeight: 1280 }; // Fixed 50KB target approx
                 const blob = await imageCompression(currentImg, options);
-                saveFile(blob, 'compressed_image.jpg');
+                saveFile(blob, 'compressed.jpg');
             } else if(activeTool === 'jpg2pdf') {
                 const { jsPDF } = window.jspdf;
                 const doc = new jsPDF();
                 doc.addImage(canvas.toDataURL('image/jpeg'), 'JPEG', 0, 0, 210, 297);
-                doc.save('converted_document.pdf');
+                doc.save('converted.pdf');
             } else {
-                const format = document.getElementById('targetFormat').value || 'image/png';
-                const extension = format.split('/')[1];
+                const format = document.getElementById('targetFormat').value;
                 const link = document.createElement('a');
-                link.download = `best_image_pro.${extension}`;
+                link.download = `image.${format.split('/')[1]}`;
                 link.href = canvas.toDataURL(format);
                 link.click();
             }
         }
 
         function saveFile(blob, name) {
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = name;
-            link.click();
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url; a.download = name; a.click();
         }
 
         function closeModal() {
