@@ -201,7 +201,7 @@
     <!-- Footer -->
     <footer class="bg-white dark:bg-dark border-t border-gray-200 dark:border-gray-700 mt-12">
         <div class="max-w-7xl mx-auto px-4 py-6 text-center text-gray-500 text-sm">
-            <p>© 2026 Image Compressor. All rights reserved.</p>
+            <p>© 2024 Image Compressor. All rights reserved.</p>
         </div>
     </footer>
 
@@ -329,4 +329,23 @@
             resultsArea.classList.add('hidden');
         });
 
-        // Compress
+        // Compress Button
+        compressBtn.addEventListener('click', async () => {
+            if (selectedFiles.length === 0) return;
+
+            // UI Loading State
+            compressBtn.disabled = true;
+            loader.style.display = 'block';
+            compressBtn.querySelector('span').textContent = 'Compressing...';
+
+            try {
+                const options = {
+                    maxSizeMB: 1,
+                    maxWidthOrHeight: 1920,
+                    useWebWorker: true,
+                    initialQuality: parseInt(qualitySlider.value) / 100
+                };
+
+                // Check if user wants specific size
+                const targetVal = parseFloat(targetSizeInput.value);
+                const unit = unitSelect.value
