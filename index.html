@@ -1,280 +1,225 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SwiftStudio 2026 | Ultimate AI Media Suite</title>
+    <title>Best Image Compressor - Pro Suite</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css">
-    
-    <script src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.2/dist/browser-image-compression.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/browser-image-compression/2.0.2/browser-image-compression.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
-
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Plus Jakarta Sans', 'sans-serif'] },
-                    colors: { brand: '#4F46E5', accent: '#EC4899', dark: '#0F172A' }
-                }
-            }
-        }
-    </script>
 
     <style>
-        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); }
-        .dark .glass { background: rgba(15, 23, 42, 0.85); border: 1px solid rgba(255,255,255,0.05); }
-        .btn-gradient { background: linear-gradient(135deg, #4F46E5 0%, #EC4899 100%); transition: all 0.3s ease; }
-        .btn-gradient:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(79, 70, 229, 0.4); }
-        .badge-new { background: #10B981; color: white; font-size: 9px; padding: 2px 6px; border-radius: 6px; font-weight: 800; vertical-align: middle; }
+        .tool-card { transition: all 0.3s ease; border: 2px solid transparent; }
+        .tool-card:hover { transform: translateY(-8px); border-color: #ef4444; box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
+        #previewCanvas { max-width: 100%; height: auto; border-radius: 8px; }
+        .slider { width: 100%; accent-color: #ef4444; }
     </style>
 </head>
-<body class="bg-slate-50 dark:bg-dark text-slate-900 dark:text-slate-100 min-h-screen font-sans">
+<body class="bg-slate-50 text-slate-900 font-sans">
 
-    <nav class="sticky top-0 z-50 glass border-b border-slate-200/50 dark:border-slate-800/50 px-8 py-4">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-brand rounded-xl flex items-center justify-center text-white shadow-lg">
-                    <i class="fa-solid fa-wand-magic-sparkles"></i>
-                </div>
-                <span class="text-xl font-black tracking-tight uppercase italic">SwiftStudio <span class="text-brand">2026</span></span>
+    <nav class="bg-white shadow-sm border-b sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <div class="bg-red-600 p-1.5 rounded-lg text-white"><i class="fas fa-magic text-xl"></i></div>
+                <span class="text-xl font-black tracking-tight">BEST IMAGE <span class="text-red-600">PRO</span></span>
             </div>
-            <button id="theme-toggle" class="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-all">
-                <i class="fa-solid fa-moon dark:hidden"></i>
-                <i class="fa-solid fa-sun hidden dark:inline text-yellow-400"></i>
-            </button>
+            <div class="hidden md:flex items-center gap-8 font-semibold text-sm">
+                <a href="#" class="hover:text-red-600">COMPRESS</a>
+                <a href="#" class="hover:text-red-600">BG REMOVE</a>
+                <a href="#" class="hover:text-red-600">FILTERS</a>
+            </div>
+            <button class="bg-slate-900 text-white px-6 py-2 rounded-full font-bold text-sm hover:bg-slate-800 transition">Get Started</button>
         </div>
     </nav>
 
-    <main class="max-w-6xl mx-auto px-6 py-12">
-        <div class="grid lg:grid-cols-12 gap-10">
+    <main class="max-w-7xl mx-auto px-6 py-12">
+        <div class="text-center mb-16">
+            <h1 class="text-5xl font-black mb-4 leading-tight text-slate-900">Professional Tools, <span class="text-red-600">Zero Cost.</span></h1>
+            <p class="text-lg text-slate-500 max-w-2xl mx-auto">Compress, remove backgrounds, and edit your images instantly without any server upload.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             
-            <div id="sidebar" class="hidden lg:col-span-4 space-y-6">
-                <div class="glass rounded-[2rem] p-8 space-y-6 sticky top-28 border border-slate-200 dark:border-slate-800">
-                    <h3 class="text-xs font-black uppercase text-slate-400 tracking-widest flex items-center justify-between">
-                        Studio Settings <span class="badge-new">PRO V4</span>
-                    </h3>
-
-                    <div class="space-y-3">
-                        <label class="text-sm font-bold">Text Overlay <span class="text-[10px] text-brand uppercase tracking-tighter">New</span></label>
-                        <input type="text" id="overlay-text" placeholder="Add custom text..." class="w-full bg-slate-100 dark:bg-slate-900 p-3 rounded-xl text-sm border-none outline-none focus:ring-2 ring-brand">
-                    </div>
-
-                    <div class="space-y-3">
-                        <label class="text-sm font-bold">ZIP Password <i class="fa-solid fa-lock text-[10px] text-slate-400"></i></label>
-                        <input type="text" id="zip-pass" placeholder="Optional security..." class="w-full bg-slate-100 dark:bg-slate-900 p-3 rounded-xl text-sm border-none outline-none focus:ring-2 ring-brand">
-                    </div>
-
-                    <hr class="border-slate-100 dark:border-slate-800">
-
-                    <div class="space-y-4">
-                        <div class="flex justify-between text-xs font-bold uppercase text-slate-400">
-                            <span>Image Quality</span>
-                            <span id="q-label" class="text-brand">80%</span>
-                        </div>
-                        <input type="range" id="q-slider" min="10" max="100" value="80" class="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-brand">
-                    </div>
-
-                    <div class="space-y-3">
-                        <label class="text-sm font-bold">Target Format</label>
-                        <select id="format-select" class="w-full bg-slate-100 dark:bg-slate-900 p-3 rounded-xl text-sm font-bold outline-none">
-                            <option value="original">Original (Smart)</option>
-                            <option value="image/webp">WebP (Smallest)</option>
-                            <option value="image/jpeg">JPEG (Standard)</option>
-                            <option value="pdf">Professional PDF</option>
-                        </select>
-                    </div>
-
-                    <button id="start-btn" class="w-full btn-gradient text-white font-black py-4 rounded-2xl shadow-xl flex items-center justify-center gap-2">
-                        <span>PROCESS ASSETS</span>
-                        <i id="loader" class="fa-solid fa-spinner animate-spin hidden"></i>
-                    </button>
+            <div onclick="openTool('bg-remove')" class="tool-card bg-white p-8 rounded-3xl cursor-pointer">
+                <div class="w-14 h-14 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-6">
+                    <i class="fas fa-user-slash text-2xl"></i>
                 </div>
+                <h3 class="text-xl font-bold mb-2">Remove BG</h3>
+                <p class="text-slate-500 text-sm">AI se image ka background saaf karein ek click mein.</p>
             </div>
 
-            <div class="lg:col-span-8 space-y-8">
-                <div id="drop-zone" class="bg-white dark:bg-slate-900 border-4 border-dashed border-slate-200 dark:border-slate-800 rounded-[3rem] p-24 text-center cursor-pointer hover:border-brand transition-all relative shadow-xl shadow-slate-200/50">
-                    <input type="file" id="file-input" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer" multiple accept="image/*">
-                    <div class="space-y-6">
-                        <div class="w-20 h-20 bg-brand/10 text-brand rounded-[2rem] flex items-center justify-center mx-auto">
-                            <i class="fa-solid fa-upload text-3xl"></i>
-                        </div>
-                        <h2 class="text-2xl font-black italic">The 2026 Image Studio</h2>
-                        <p class="text-slate-400">Drag images to start cropping & compressing.</p>
-                    </div>
+            <div onclick="openTool('filters')" class="tool-card bg-white p-8 rounded-3xl cursor-pointer border-red-100 border-2">
+                <div class="w-14 h-14 bg-red-100 text-red-600 rounded-2xl flex items-center justify-center mb-6">
+                    <i class="fas fa-sliders-h text-2xl"></i>
                 </div>
+                <h3 class="text-xl font-bold mb-2">Photo Filters</h3>
+                <p class="text-slate-500 text-sm">Brightness, Contrast aur Grayscale adjust karein.</p>
+            </div>
 
-                <div id="results-area" class="hidden space-y-6">
-                    <div class="flex items-center justify-between px-4">
-                        <h3 class="text-xl font-black">Output Assets</h3>
-                        <div class="flex gap-2">
-                            <button id="download-zip" class="bg-dark dark:bg-white text-white dark:text-dark px-6 py-2.5 rounded-xl font-bold text-sm">Download ZIP</button>
-                        </div>
-                    </div>
-                    <div id="results-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6 pb-20"></div>
+            <div onclick="openTool('compress')" class="tool-card bg-white p-8 rounded-3xl cursor-pointer">
+                <div class="w-14 h-14 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center mb-6">
+                    <i class="fas fa-weight-hanging text-2xl"></i>
                 </div>
+                <h3 class="text-xl font-bold mb-2">Compress</h3>
+                <p class="text-slate-500 text-sm">Size kam karein bina quality kharab kiye.</p>
+            </div>
+
+            <div onclick="openTool('jpg2pdf')" class="tool-card bg-white p-8 rounded-3xl cursor-pointer">
+                <div class="w-14 h-14 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center mb-6">
+                    <i class="fas fa-file-pdf text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">JPG to PDF</h3>
+                <p class="text-slate-500 text-sm">Multiple photos ki ek professional PDF banayein.</p>
             </div>
         </div>
     </main>
 
+    <div id="editorModal" class="fixed inset-0 bg-black/80 hidden z-[100] flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-4xl rounded-3xl overflow-hidden shadow-2xl flex flex-col md:flex-row">
+            <div class="flex-1 bg-slate-200 p-6 flex items-center justify-center min-h-[300px]">
+                <canvas id="previewCanvas"></canvas>
+            </div>
+            <div class="w-full md:w-80 p-8 flex flex-col gap-6">
+                <h2 class="text-2xl font-bold" id="toolTitle">Edit Image</h2>
+                
+                <div id="filterControls" class="space-y-4 hidden">
+                    <div>
+                        <label class="text-xs font-bold uppercase text-slate-400">Brightness</label>
+                        <input type="range" id="brightness" min="0" max="200" value="100" class="slider" oninput="applyFilters()">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold uppercase text-slate-400">Contrast</label>
+                        <input type="range" id="contrast" min="0" max="200" value="100" class="slider" oninput="applyFilters()">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold uppercase text-slate-400">Saturation</label>
+                        <input type="range" id="saturate" min="0" max="200" value="100" class="slider" oninput="applyFilters()">
+                    </div>
+                    <button onclick="grayscale()" class="w-full py-2 border-2 border-slate-200 rounded-lg hover:bg-slate-50 font-bold">Toggle Grayscale</button>
+                </div>
+
+                <div id="bgInfo" class="hidden text-sm text-blue-600 font-medium bg-blue-50 p-4 rounded-xl">
+                    <i class="fas fa-info-circle mr-1"></i> AI is detecting edges... (Mockup Logic Active)
+                </div>
+
+                <div class="mt-auto pt-6 border-t flex gap-2">
+                    <button onclick="closeModal()" class="flex-1 py-3 bg-slate-100 rounded-xl font-bold hover:bg-slate-200">Cancel</button>
+                    <button onclick="downloadFinal()" class="flex-1 py-3 bg-red-600 text-white rounded-xl font-bold hover:bg-red-700 shadow-lg">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <input type="file" id="fileInput" class="hidden" accept="image/*">
+    <div id="globalLoader" class="fixed inset-0 bg-white/90 hidden z-[200] flex flex-col items-center justify-center">
+        <div class="w-16 h-16 border-4 border-red-600 border-t-transparent rounded-full animate-spin"></div>
+        <p class="mt-4 font-black uppercase tracking-widest text-red-600">Processing...</p>
+    </div>
+
     <script>
-        let selectedFiles = [];
-        let finalFiles = [];
-        let croppers = {};
+        let currentImg = new Image();
+        let activeTool = '';
+        const canvas = document.getElementById('previewCanvas');
+        const ctx = canvas.getContext('2d');
 
-        const fileInput = document.getElementById('file-input');
-        const resultsGrid = document.getElementById('results-grid');
-        const sidebar = document.getElementById('sidebar');
-        const dropZone = document.getElementById('drop-zone');
-        const startBtn = document.getElementById('start-btn');
-        const loader = document.getElementById('loader');
-
-        // Dark Mode
-        document.getElementById('theme-toggle').onclick = () => document.documentElement.classList.toggle('dark');
-        document.getElementById('q-slider').oninput = (e) => document.getElementById('q-label').textContent = e.target.value + '%';
-
-        fileInput.onchange = (e) => {
-            selectedFiles = Array.from(e.target.files);
-            if(selectedFiles.length > 0) {
-                dropZone.classList.add('hidden');
-                sidebar.classList.remove('hidden');
-                document.getElementById('results-area').classList.remove('hidden');
-                renderQueue();
-            }
-        };
-
-        function renderQueue() {
-            resultsGrid.innerHTML = '';
-            selectedFiles.forEach((file, index) => {
-                const url = URL.createObjectURL(file);
-                const div = document.createElement('div');
-                div.className = "glass p-5 rounded-[2.5rem] space-y-4 shadow-sm group relative overflow-hidden";
-                div.innerHTML = `
-                    <div class="h-48 rounded-2xl overflow-hidden bg-slate-100 dark:bg-slate-800">
-                        <img src="${url}" id="img-${index}" class="w-full h-full object-cover">
-                    </div>
-                    <div class="flex justify-between items-center px-2">
-                        <p class="text-xs font-black truncate max-w-[120px]">${file.name}</p>
-                        <button onclick="startCrop(${index})" class="bg-brand text-white px-4 py-2 rounded-xl font-bold text-[10px] hover:scale-105 transition-all">
-                            <i class="fa-solid fa-crop mr-1"></i> CROP
-                        </button>
-                    </div>
-                `;
-                resultsGrid.appendChild(div);
-            });
+        function openTool(type) {
+            activeTool = type;
+            document.getElementById('fileInput').click();
         }
 
-        window.startCrop = (index) => {
-            const img = document.getElementById(`img-${index}`);
-            if (croppers[index]) {
-                const canvas = croppers[index].getCroppedCanvas();
-                img.src = canvas.toDataURL();
-                croppers[index].destroy();
-                delete croppers[index];
-                canvas.toBlob(blob => {
-                    selectedFiles[index] = new File([blob], selectedFiles[index].name, {type: 'image/png'});
-                });
-            } else {
-                croppers[index] = new Cropper(img, { aspectRatio: NaN, viewMode: 1 });
+        document.getElementById('fileInput').onchange = async (e) => {
+            const file = e.target.files[0];
+            if(!file) return;
+
+            document.getElementById('globalLoader').classList.remove('hidden');
+
+            if(activeTool === 'compress') {
+                const options = { maxSizeMB: 0.1, maxWidthOrHeight: 1024 };
+                const blob = await imageCompression(file, options);
+                saveBlob(blob, 'compressed.jpg');
+                document.getElementById('globalLoader').classList.add('hidden');
+            } 
+            else if(activeTool === 'jpg2pdf') {
+                const { jsPDF } = window.jspdf;
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const doc = new jsPDF();
+                    doc.addImage(event.target.result, 'JPEG', 10, 10, 190, 150);
+                    doc.save('converted.pdf');
+                    document.getElementById('globalLoader').classList.add('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+            else {
+                // Show Editor for Filters & BG Remove
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    currentImg.onload = () => {
+                        canvas.width = currentImg.width;
+                        canvas.height = currentImg.height;
+                        ctx.drawImage(currentImg, 0, 0);
+                        setupEditorUI(activeTool);
+                    };
+                    currentImg.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
             }
         };
 
-        startBtn.onclick = async () => {
-            loader.classList.remove('hidden');
-            startBtn.disabled = true;
-            finalFiles = [];
+        function setupEditorUI(tool) {
+            document.getElementById('globalLoader').classList.add('hidden');
+            document.getElementById('editorModal').classList.remove('hidden');
+            document.getElementById('filterControls').classList.add('hidden');
+            document.getElementById('bgInfo').classList.add('hidden');
+
+            if(tool === 'filters') {
+                document.getElementById('toolTitle').innerText = 'Adjust Filters';
+                document.getElementById('filterControls').classList.remove('hidden');
+            } else if(tool === 'bg-remove') {
+                document.getElementById('toolTitle').innerText = 'Background Remover';
+                document.getElementById('bgInfo').classList.remove('hidden');
+                // Mockup: Simple center crop effect for BG remove demo
+                ctx.globalCompositeOperation = 'destination-in';
+                ctx.beginPath();
+                ctx.arc(canvas.width/2, canvas.height/2, canvas.height/2, 0, Math.PI*2);
+                ctx.fill();
+            }
+        }
+
+        function applyFilters() {
+            const b = document.getElementById('brightness').value;
+            const c = document.getElementById('contrast').value;
+            const s = document.getElementById('saturate').value;
             
-            const overlayText = document.getElementById('overlay-text').value;
-            const quality = document.getElementById('q-slider').value / 100;
-            const format = document.getElementById('format-select').value;
-
-            for (let i = 0; i < selectedFiles.length; i++) {
-                const file = selectedFiles[i];
-                let processedBlob = await applyEffects(file, overlayText);
-                
-                const options = { 
-                    maxSizeMB: 1, 
-                    useWebWorker: true, 
-                    initialQuality: quality,
-                    fileType: format === 'original' ? file.type : (format === 'pdf' ? 'image/jpeg' : format)
-                };
-                
-                const compressed = await imageCompression(processedBlob, options);
-                finalFiles.push({ file: compressed, name: file.name });
-                updateThumbnailDownload(i, compressed);
-            }
-
-            if(format === 'pdf') generatePDF();
-            loader.classList.add('hidden');
-            startBtn.disabled = false;
-        };
-
-        async function applyEffects(file, text) {
-            return new Promise((resolve) => {
-                const img = new Image();
-                img.src = URL.createObjectURL(file);
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    canvas.width = img.width;
-                    canvas.height = img.height;
-                    ctx.drawImage(img, 0, 0);
-
-                    if(text) {
-                        ctx.font = `bold ${canvas.width/15}px Plus Jakarta Sans`;
-                        ctx.fillStyle = "rgba(255,255,255,0.8)";
-                        ctx.shadowColor = "rgba(0,0,0,0.5)";
-                        ctx.shadowBlur = 15;
-                        ctx.textAlign = "center";
-                        ctx.fillText(text, canvas.width/2, canvas.height/2);
-                    }
-                    canvas.toBlob(b => resolve(new File([b], file.name, {type:'image/png'})), 'image/png');
-                };
-            });
+            ctx.filter = `brightness(${b}%) contrast(${c}%) saturate(${s}%)`;
+            ctx.drawImage(currentImg, 0, 0);
         }
 
-        function updateThumbnailDownload(index, blob) {
-            const url = URL.createObjectURL(blob);
-            const container = resultsGrid.children[index];
-            const oldLink = container.querySelector('.download-badge');
-            if(oldLink) oldLink.remove();
+        function grayscale() {
+            ctx.filter = ctx.filter.includes('grayscale') ? 'grayscale(0%)' : 'grayscale(100%)';
+            ctx.drawImage(currentImg, 0, 0);
+        }
 
+        function downloadFinal() {
             const link = document.createElement('a');
-            link.href = url;
-            link.download = `swift_2026_${finalFiles[index].name}`;
-            link.className = "download-badge absolute top-4 left-4 bg-brand text-white px-3 py-1.5 rounded-lg text-[10px] font-black shadow-lg";
-            link.innerHTML = `<i class="fa-solid fa-check mr-1"></i> DONE`;
-            container.appendChild(link);
+            link.download = 'edited_image.png';
+            link.href = canvas.toDataURL();
+            link.click();
+            closeModal();
         }
 
-        async function generatePDF() {
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF();
-            for(let i=0; i<finalFiles.length; i++) {
-                const data = await imageCompression.getDataUrlFromFile(finalFiles[i].file);
-                if(i > 0) pdf.addPage();
-                pdf.addImage(data, 'JPEG', 10, 10, 190, 0);
-            }
-            pdf.save("SwiftStudio_2026_Export.pdf");
+        function closeModal() {
+            document.getElementById('editorModal').classList.add('hidden');
+            document.getElementById('fileInput').value = '';
         }
 
-        document.getElementById('download-zip').onclick = async () => {
-            const zip = new JSZip();
-            const pass = document.getElementById('zip-pass').value;
-            // Note: standard JSZip doesn't support passwords, but we label it for the user
-            finalFiles.forEach(f => zip.file(f.name, f.file));
-            const content = await zip.generateAsync({type:"blob"});
+        function saveBlob(blob, name) {
+            const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
-            a.href = URL.createObjectURL(content);
-            a.download = pass ? `PROTECTED_SwiftStudio.zip` : `SwiftStudio_Export.zip`;
-            a.click();
-        };
+            a.href = url; a.download = name; a.click();
+        }
     </script>
 </body>
 </html>
