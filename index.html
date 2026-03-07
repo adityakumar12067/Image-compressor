@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>Compress Image to 20KB, 50KB, 100KB Online Free | ImagePro Tool</title>
-    <meta name="description" content="Best online tool to compress image to 20kb, 50kb, 100kb and 200kb for government forms. Fast, private and free image resizer and converter.">
-    <meta name="keywords" content="compress image to 20kb, compress image to 50kb, resize image for form, 100kb image compressor, image metadata remover">
+    <title>ImagePro | Professional Compressor & Comparison Tool</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -14,111 +11,149 @@
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; transition: 0.3s; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
         .dark { background-color: #0f172a; color: white; }
-        canvas { max-width: 100%; height: auto; border-radius: 20px; background: #fff; box-shadow: 0 20px 50px rgba(0,0,0,0.1); }
-        .target-btn { transition: all 0.2s; border: 2px solid #e2e8f0; font-weight: 800; font-size: 12px; }
-        .target-btn:hover { border-color: #ef4444; color: #ef4444; transform: scale(1.05); }
-        .target-btn.active { background: #ef4444; color: white; border-color: #ef4444; }
-        .tool-card { cursor: pointer; transition: 0.3s; }
-        .tool-card:hover { transform: translateY(-10px); border-color: #ef4444; }
-        #dropZone { cursor: pointer; border-radius: 3rem; transition: 0.3s; }
-        #dropZone:hover { border-color: #ef4444; background: rgba(239, 68, 68, 0.02); }
+        
+        /* ⭐ COMPARISON SLIDER CSS */
+        .comparison-container {
+            position: relative;
+            width: 100%;
+            max-height: 50vh;
+            overflow: hidden;
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            background: #eee;
+        }
+        #afterImage {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            clip-path: inset(0 0 0 50%); /* Start at half */
+        }
+        #beforeImage {
+            display: block;
+            width: 100%;
+            height: auto;
+            max-height: 50vh;
+            object-fit: contain;
+        }
+        .slider-line {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 4px;
+            background: #ef4444;
+            cursor: ew-resize;
+            z-index: 10;
+        }
+        .slider-handle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.5);
+            pointer-events: none;
+        }
+
+        /* UI BUTTONS FIX (Based on your feedback) */
+        .target-btn {
+            padding: 14px;
+            border-radius: 14px;
+            background: #1e293b;
+            color: white;
+            font-weight: 800;
+            font-size: 11px;
+            border: 2px solid transparent;
+            transition: 0.3s;
+        }
+        .target-btn.active {
+            background: #ef4444;
+            border-color: #ef4444;
+            box-shadow: 0 8px 15px rgba(239, 68, 68, 0.3);
+        }
+        .label-badge {
+            position: absolute;
+            top: 10px;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 900;
+            text-transform: uppercase;
+            z-index: 5;
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900 transition-colors">
+<body class="bg-slate-50 dark:bg-slate-900 transition-colors">
 
-    <nav class="sticky top-0 z-50 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b px-6 h-16 flex justify-between items-center">
-        <div class="flex items-center gap-2 font-black text-xl tracking-tighter uppercase dark:text-white">
-            <div class="bg-red-600 p-2 rounded-lg text-white"><i class="fas fa-bolt"></i></div>
-            IMAGE<span class="text-red-600">PRO</span>
+    <nav class="h-16 flex justify-between items-center px-6 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b">
+        <div class="font-black text-xl tracking-tighter uppercase dark:text-white">
+            <span class="bg-red-600 text-white px-2 py-1 rounded-md mr-1">I</span>PRO
         </div>
-        <button onclick="document.body.classList.toggle('dark')" class="p-2 rounded-full bg-slate-100 dark:bg-slate-800 dark:text-white"><i class="fas fa-moon"></i></button>
+        <button onclick="document.body.classList.toggle('dark')" class="p-2 dark:text-white"><i class="fas fa-adjust"></i></button>
     </nav>
 
-    <header class="py-12 px-6 text-center">
-        <h1 class="text-4xl md:text-6xl font-black mb-4 dark:text-white">
-            Compress Image to <span class="text-red-600">20KB, 50KB, 100KB</span>
-        </h1>
-        <p class="text-slate-500 mb-10 font-medium">Perfect for Government Forms, Exams, and Job Portals.</p>
-        
-        <div id="dropZone" onclick="openTool('compress')" class="max-w-3xl mx-auto border-4 border-dashed border-slate-300 dark:border-slate-700 py-16 px-6 bg-white dark:bg-slate-800 shadow-sm group">
-            <i class="fas fa-file-upload text-5xl text-slate-300 group-hover:text-red-500 mb-4"></i>
-            <p class="font-bold text-slate-400 uppercase tracking-widest text-xs">Drop Image or Click to Start</p>
+    <header class="py-16 px-6 text-center">
+        <h1 class="text-4xl md:text-5xl font-extrabold mb-6 dark:text-white">Compare & <span class="text-red-600">Compress</span></h1>
+        <div id="dropArea" onclick="document.getElementById('fileInput').click()" class="max-w-xl mx-auto border-4 border-dashed border-slate-200 dark:border-slate-700 p-12 rounded-[3rem] bg-white dark:bg-slate-800 transition-all hover:border-red-500 cursor-pointer shadow-sm">
+            <i class="fas fa-images text-5xl text-slate-200 mb-4"></i>
+            <p class="font-bold text-slate-400 uppercase tracking-widest text-xs">Drop Image to See the Magic</p>
         </div>
     </header>
 
-    <section class="max-w-4xl mx-auto px-6 mb-12 flex flex-wrap justify-center gap-3">
-        <span class="text-xs font-black uppercase text-slate-400 w-full text-center mb-2 text-[10px] tracking-widest">Quick SEO Actions:</span>
-        <button onclick="quickAction(20)" class="px-4 py-2 rounded-full bg-white dark:bg-slate-800 border font-bold text-xs hover:border-red-500">Compress to 20KB</button>
-        <button onclick="quickAction(50)" class="px-4 py-2 rounded-full bg-white dark:bg-slate-800 border font-bold text-xs hover:border-red-500">Compress to 50KB</button>
-        <button onclick="quickAction(100)" class="px-4 py-2 rounded-full bg-white dark:bg-slate-800 border font-bold text-xs hover:border-red-500">Compress to 100KB</button>
-        <button onclick="quickAction(200)" class="px-4 py-2 rounded-full bg-white dark:bg-slate-800 border font-bold text-xs hover:border-red-500">Compress for Forms</button>
-    </section>
-
-    <div class="max-w-4xl mx-auto ad-placeholder bg-slate-100 border border-dashed p-4 text-center rounded-xl text-[10px] text-slate-400 mb-10">ADSENSE AD SPACE</div>
-
-    <section class="max-w-4xl mx-auto py-16 px-6 border-t dark:text-slate-400">
-        <h2 class="text-2xl font-black mb-6 dark:text-white">Form Submission Guides</h2>
-        <div class="grid md:grid-cols-2 gap-8">
-            <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
-                <h4 class="font-bold text-red-600 mb-2 underline">How to compress image for SSC/UPSC?</h4>
-                <p class="text-sm">Most forms require photos between 20KB to 50KB. Use our "Target Size" buttons in the editor to get the exact size instantly.</p>
-            </div>
-            <div class="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700">
-                <h4 class="font-bold text-red-600 mb-2 underline">Will I lose quality?</h4>
-                <p class="text-sm">Our "Smart-Scale" algorithm reduces file size while maintaining the clarity needed for official documents.</p>
-            </div>
-        </div>
-    </section>
-
-    <footer class="bg-slate-900 text-slate-500 py-12 px-6 mt-10">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
-            <div class="text-white font-black uppercase tracking-tighter">IMAGEPRO</div>
-            <div class="flex gap-6 text-[10px] font-black uppercase tracking-widest">
-                <a href="/privacy.html" class="hover:text-red-500">Privacy</a>
-                <a href="/terms.html" class="hover:text-red-500">Terms</a>
-                <a href="/contact.html" class="hover:text-red-500">Contact</a>
-            </div>
-            <div class="text-[10px] font-bold uppercase tracking-[0.3em]">Built by Aditya Kumar</div>
-        </div>
-    </footer>
-
-    <div id="editorModal" class="fixed inset-0 bg-black/95 hidden z-[100] flex items-center justify-center p-4">
-        <div class="bg-white dark:bg-slate-800 w-full max-w-5xl rounded-[3rem] overflow-hidden flex flex-col md:flex-row h-[85vh]">
-            <div class="flex-1 bg-slate-100 dark:bg-slate-700 p-8 flex items-center justify-center relative">
-                <div id="loader" class="absolute bg-white/90 p-4 rounded-xl shadow-xl hidden font-black text-xs uppercase z-20">
-                    <i class="fas fa-spinner animate-spin mr-2"></i> Working...
+    <div id="editorModal" class="fixed inset-0 bg-slate-900/95 backdrop-blur-xl hidden z-[100] flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 w-full max-w-5xl rounded-[3rem] overflow-hidden flex flex-col md:flex-row shadow-2xl">
+            
+            <div class="flex-[1.5] bg-black p-4 flex items-center justify-center relative">
+                <div class="comparison-container" id="sliderContainer">
+                    <span class="label-badge bg-black/50 text-white left-4">Original</span>
+                    <span class="label-badge bg-red-600 text-white right-4">Compressed</span>
+                    
+                    <img id="beforeImage" src="" alt="Original">
+                    <img id="afterImage" src="" alt="Compressed">
+                    
+                    <div class="slider-line" id="sliderLine">
+                        <div class="slider-handle"><i class="fas fa-arrows-alt-h"></i></div>
+                    </div>
                 </div>
-                <canvas id="previewCanvas"></canvas>
             </div>
             
-            <div class="w-full md:w-80 p-8 flex flex-col gap-6">
-                <h2 class="text-xl font-black text-red-600 uppercase italic">Editor</h2>
-                
-                <div id="compressControls" class="hidden space-y-4">
-                    <label class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Target Size (KB)</label>
-                    <div class="grid grid-cols-2 gap-2">
-                        <button onclick="setTargetSize(20, this)" class="target-btn py-3 rounded-xl">20KB</button>
-                        <button onclick="setTargetSize(50, this)" class="target-btn py-3 rounded-xl active">50KB</button>
-                        <button onclick="setTargetSize(100, this)" class="target-btn py-3 rounded-xl">100KB</button>
-                        <button onclick="setTargetSize(200, this)" class="target-btn py-3 rounded-xl">200KB</button>
+            <div class="w-full md:w-80 p-8 flex flex-col gap-8">
+                <div>
+                    <h2 class="text-sm font-black text-slate-400 uppercase tracking-[0.2em] mb-6">Optimization</h2>
+                    <div class="grid grid-cols-2 gap-3">
+                        <button onclick="updateTarget(20, this)" class="target-btn">20KB</button>
+                        <button onclick="updateTarget(50, this)" class="target-btn active">50KB</button>
+                        <button onclick="updateTarget(100, this)" class="target-btn">100KB</button>
+                        <button onclick="updateTarget(200, this)" class="target-btn">200KB</button>
                     </div>
-                    <input type="hidden" id="sizeLimit" value="0.05">
                 </div>
 
-                <div id="convertControls" class="hidden space-y-4">
-                    <label class="text-[10px] font-black uppercase text-slate-400 tracking-widest">Format</label>
-                    <select id="targetFormat" class="w-full p-4 bg-slate-100 dark:bg-slate-700 rounded-2xl font-bold dark:text-white">
-                        <option value="image/jpeg">JPEG</option>
-                        <option value="image/png">PNG</option>
-                        <option value="image/webp">WebP</option>
-                    </select>
+                <div class="bg-slate-50 dark:bg-slate-700/50 p-4 rounded-2xl">
+                    <div class="flex justify-between text-[10px] font-black uppercase text-slate-400 mb-2">
+                        <span>Original</span>
+                        <span id="origSizeText">0 KB</span>
+                    </div>
+                    <div class="flex justify-between text-[10px] font-black uppercase text-red-500">
+                        <span>New Size</span>
+                        <span id="newSizeText">Processing...</span>
+                    </div>
                 </div>
 
                 <div class="mt-auto space-y-3">
-                    <button onclick="downloadFinal()" class="w-full py-5 bg-red-600 text-white rounded-3xl font-black text-lg shadow-xl shadow-red-200">SAVE & DOWNLOAD</button>
-                    <button onclick="closeModal()" class="w-full py-3 bg-slate-100 dark:bg-slate-700 dark:text-slate-400 rounded-2xl font-bold text-[10px] tracking-widest uppercase">Cancel</button>
+                    <button onclick="downloadFinal()" class="w-full py-5 bg-red-600 text-white rounded-[1.5rem] font-black text-lg shadow-xl shadow-red-500/20 hover:scale-[1.02] transition">DOWNLOAD</button>
+                    <button onclick="closeModal()" class="w-full py-3 text-slate-400 font-bold text-xs uppercase tracking-widest">Cancel</button>
                 </div>
             </div>
         </div>
@@ -127,118 +162,62 @@
     <input type="file" id="fileInput" class="hidden" accept="image/*">
 
     <script>
-        const canvas = document.getElementById('previewCanvas');
-        const ctx = canvas.getContext('2d');
-        let currentFile, currentImg = new Image(), activeTool = '';
+        let currentFile, compressedBlob;
+        const beforeImg = document.getElementById('beforeImage');
+        const afterImg = document.getElementById('afterImage');
+        const sliderContainer = document.getElementById('sliderContainer');
+        const sliderLine = document.getElementById('sliderLine');
+        let targetKB = 50;
 
-        // 2️⃣ JAVASCRIPT LOGIC (Point 2)
-        function setTargetSize(kb, btn) {
-            document.getElementById("sizeLimit").value = kb / 1024;
-            document.querySelectorAll('.target-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-        }
+        // Slider Logic
+        sliderContainer.addEventListener('mousemove', (e) => {
+            const rect = sliderContainer.getBoundingClientRect();
+            let x = e.clientX - rect.left;
+            if (x < 0) x = 0;
+            if (x > rect.width) x = rect.width;
+            
+            const percent = (x / rect.width) * 100;
+            sliderLine.style.left = percent + '%';
+            afterImg.style.clipPath = `inset(0 0 0 ${percent}%)`;
+        });
 
-        function quickAction(kb) {
-            activeTool = 'compress';
-            document.getElementById('fileInput').click();
-            // This will auto-set the size when the modal opens
-            setTimeout(() => {
-                const limitInput = document.getElementById("sizeLimit");
-                limitInput.value = kb / 1024;
-                // Update button UI if modal is open
-                document.querySelectorAll('.target-btn').forEach(b => {
-                    if(b.innerText.includes(kb)) b.classList.add('active');
-                    else b.classList.remove('active');
-                });
-            }, 500);
-        }
-
-        function openTool(type) {
-            activeTool = type;
-            document.getElementById('fileInput').click();
-        }
-
-        document.getElementById('fileInput').onchange = (e) => {
+        document.getElementById('fileInput').onchange = async (e) => {
             const file = e.target.files[0];
             if(file) {
-                if(!file.type.startsWith('image/')) {
-                    alert("Please select a valid image.");
-                    return;
-                }
-                processFile(file);
+                currentFile = file;
+                document.getElementById('origSizeText').innerText = (file.size / 1024).toFixed(1) + " KB";
+                beforeImg.src = URL.createObjectURL(file);
+                document.getElementById('editorModal').classList.remove('hidden');
+                runCompression();
             }
         };
 
-        function processFile(file) {
-            currentFile = file;
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                currentImg.onload = () => {
-                    canvas.width = currentImg.width;
-                    canvas.height = currentImg.height;
-                    ctx.drawImage(currentImg, 0, 0);
-                    showModal();
-                };
-                currentImg.src = event.target.result;
-            };
-            reader.readAsDataURL(file);
+        async function updateTarget(kb, btn) {
+            targetKB = kb;
+            document.querySelectorAll('.target-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            runCompression();
         }
 
-        function showModal() {
-            document.getElementById('editorModal').classList.remove('hidden');
-            document.getElementById('compressControls').classList.toggle('hidden', activeTool !== 'compress');
-            document.getElementById('convertControls').classList.toggle('hidden', activeTool !== 'convert');
+        async function runCompression() {
+            const options = { maxSizeMB: targetKB / 1024, maxWidthOrHeight: 1920, useWebWorker: true };
+            try {
+                compressedBlob = await imageCompression(currentFile, options);
+                afterImg.src = URL.createObjectURL(compressedBlob);
+                document.getElementById('newSizeText').innerText = (compressedBlob.size / 1024).toFixed(1) + " KB";
+            } catch (e) { console.error(e); }
         }
 
-        async function downloadFinal() {
-            const loader = document.getElementById('loader');
-            loader.classList.remove('hidden');
-
-            if(activeTool === 'compress') {
-                const sizeLimit = document.getElementById('sizeLimit').value;
-                const options = { 
-                    maxSizeMB: parseFloat(sizeLimit), 
-                    maxWidthOrHeight: 1920,
-                    useWebWorker: true,
-                    initialQuality: 0.8
-                };
-                try {
-                    const blob = await imageCompression(currentFile, options);
-                    saveFile(blob, `compressed_${currentFile.name}`);
-                } catch (e) { alert("Error!"); }
-            } 
-            else if(activeTool === 'base64') {
-                const b64 = canvas.toDataURL();
-                navigator.clipboard.writeText(b64);
-                alert("Base64 copied!");
-            }
-            else {
-                const format = document.getElementById('targetFormat').value;
-                const link = document.createElement('a');
-                link.download = `imagepro-export.${format.split('/')[1]}`;
-                link.href = canvas.toDataURL(format, 0.9);
-                link.click();
-            }
-            loader.classList.add('hidden');
-        }
-
-        function saveFile(blob, name) {
-            const url = URL.createObjectURL(blob);
+        function downloadFinal() {
             const a = document.createElement('a');
-            a.href = url; a.download = name; a.click();
+            a.href = URL.createObjectURL(compressedBlob);
+            a.download = `${targetKB}kb_${currentFile.name}`;
+            a.click();
         }
 
         function closeModal() {
             document.getElementById('editorModal').classList.add('hidden');
         }
-
-        // Drag Drop
-        document.body.addEventListener("dragover", e => e.preventDefault());
-        document.body.addEventListener("drop", e => {
-            e.preventDefault();
-            const file = e.dataTransfer.files[0];
-            if(file && file.type.startsWith('image/')) processFile(file);
-        });
     </script>
 </body>
 </html>
